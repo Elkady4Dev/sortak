@@ -83,7 +83,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                 </div>
 
                 {/* Photo frame 2 — Your Photo (center, biggest) */}
-                <div className="absolute top-8 sm:top-12 lg:top-14 left-2 sm:left-4 w-36 h-44 sm:w-44 sm:h-56 lg:w-56 lg:h-64 sticker bg-retro-cream rounded-xl -rotate-3 overflow-hidden z-20">
+                <div className="absolute top-8 sm:top-12 lg:top-14 left-2 sm:left-40 w-36 h-44 sm:w-44 sm:h-56 lg:w-56 lg:h-64 sticker bg-retro-cream rounded-xl -rotate-3 overflow-hidden z-20">
                   <div className="w-full h-full bg-retro-pink/10 stripe-bg flex items-center justify-center relative">
                     <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-retro-red border-[2px] border-retro-dark rounded-md px-1 sm:px-2 py-0.5">
                       <span className="text-[8px] sm:text-[10px] font-black uppercase text-retro-cream tracking-wider">Your Photo</span>
