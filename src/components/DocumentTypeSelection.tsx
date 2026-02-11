@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { StepHeader } from "@/components/StepHeader";
+import { Navigation } from "@/components/Navigation";
 import type { DocumentType } from "@/pages/Index";
 
 interface DocumentTypeSelectionProps {
@@ -50,10 +50,9 @@ const documentTypes = [
 export const DocumentTypeSelection = ({ onSelect, onBack }: DocumentTypeSelectionProps) => {
   return (
     <div className="min-h-screen bg-background">
-      <StepHeader
-        step={2}
-        totalSteps={4}
-        title="Select Document Type"
+      <Navigation
+        currentStep={2}
+        showBackButton={true}
         onBack={onBack}
       />
 

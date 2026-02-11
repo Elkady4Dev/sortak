@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Camera, RotateCcw, Check, AlertCircle, Lightbulb, Focus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { StepHeader } from "@/components/StepHeader";
+import { Navigation } from "@/components/Navigation";
+import { LoadingSpinner, LoadingOverlay } from "@/components/LoadingSpinner";
 
 interface PhotoCaptureProps {
   onPhotoCapture: (photo: string) => void;
@@ -21,6 +22,7 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [validation, setValidation] = useState<ValidationState>({
     faceDetected: false,
     centered: false,
@@ -28,6 +30,7 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
   });
 
   const startCamera = useCallback(async () => {
+    setIsCameraLoading(true);
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: 640, height: 480 },
@@ -38,6 +41,8 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
       }
     } catch (err) {
       console.error("Error accessing camera:", err);
+    } finally {
+      setIsCameraLoading(false);
     }
   }, []);
 
@@ -87,7 +92,7 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
       setCapturedImage(imageData);
       stopCamera();
     }
-    setIsCapturing(false);
+    setTimeout(() => setIsCapturing(false), 500);
   };
 
   const retakePhoto = () => {
@@ -128,10 +133,9 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <StepHeader
-        step={1}
-        totalSteps={4}
-        title="Capture Your Photo"
+      <Navigation
+        currentStep={1}
+        showBackButton={true}
         onBack={onBack}
       />
 
@@ -142,6 +146,11 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
             <div className="aspect-[3/4] relative">
               {!capturedImage ? (
                 <>
+                  {isCameraLoading && (
+                    <div className="absolute inset-0 bg-card/95 flex items-center justify-center z-10">
+                      <LoadingSpinner size="md" text="Initializing Camera..." />
+                    </div>
+                  )}
                   <video
                     ref={videoRef}
                     autoPlay
@@ -150,15 +159,17 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                     className="w-full h-full object-cover"
                   />
                   {/* Face guide overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className={`w-48 h-60 border-4 rounded-full transition-colors duration-300 ${
-                      allValid ? "border-blue-muted" : "border-accent"
-                    }`}>
-                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-sm font-medium text-card-foreground bg-card/90 px-3 py-1 rounded-full">
-                        Position your face here
+                  {!isCameraLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className={`w-48 h-60 border-4 rounded-full transition-colors duration-300 ${
+                        allValid ? "border-blue-muted" : "border-accent"
+                      }`}>
+                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-sm font-medium text-card-foreground bg-card/90 px-3 py-1 rounded-full">
+                          Position your face here
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </>
               ) : (
                 <img
@@ -216,10 +227,19 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                     size="xl"
                     className="flex-1"
                     onClick={capturePhoto}
-                    disabled={isCapturing}
+                    disabled={isCapturing || !allValid}
                   >
-                    <Camera className="w-5 h-5 mr-2" />
-                    Capture Photo
+                    {isCapturing ? (
+                      <>
+                        <LoadingSpinner size="sm" className="mr-2" />
+                        Capturing...
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-5 h-5 mr-2" />
+                        Take Photo
+                      </>
+                    )}
                   </Button>
                 </div>
                 <div className="relative flex items-center">
