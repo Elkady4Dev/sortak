@@ -2,8 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import { FAQPage } from "@/components/FAQPage";
@@ -19,24 +18,26 @@ import { SuccessPageRoute } from "@/pages/SuccessPageRoute";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const navigate = useNavigate();
+const getBasePath = () => {
+  // Check if we're in preview mode (different port) or production
+  const isPreview = window.location.port !== '8080' && window.location.port !== '5173';
+  const isProduction = import.meta.env.MODE === "production";
+  
+  if (isProduction) {
+    return "/photoai-beta";
+  } else if (isPreview) {
+    return ""; // Preview should use root path
+  } else {
+    return ""; // Development uses root path
+  }
+};
 
-  // Handle redirect from 404 page
-  useEffect(() => {
-    const redirectPath = sessionStorage.getItem('redirect-path');
-    if (redirectPath && redirectPath !== '/') {
-      sessionStorage.removeItem('redirect-path');
-      navigate(redirectPath);
-    }
-  }, [navigate]);
-
-  return (
+const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={getBasePath()}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/unauthorized" element={<NotFound />} />
@@ -59,7 +60,6 @@ const App = () => {
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-  );
-};
+);
 
 export default App;
