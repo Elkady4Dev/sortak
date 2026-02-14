@@ -12,17 +12,17 @@ export const PhotoVariationsPage = () => {
       selectedVariationData: variationData || null,
       step: 4 
     });
-    window.location.href = '/delivery-confirmation';
+    window.location.href = `${import.meta.env.BASE_URL}delivery-confirmation`;
   };
 
   const handleBack = () => {
     updateState({ step: 2 });
-    window.location.href = '/document-type';
+    window.location.href = `${import.meta.env.BASE_URL}document-type`;
   };
 
   if (!state.documentType || !state.capturedPhoto) {
     // Redirect to capture if missing required data
-    window.location.href = '/photo-capture';
+    window.location.href = `${import.meta.env.BASE_URL}photo-capture`;
     return null;
   }
 

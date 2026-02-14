@@ -15,49 +15,53 @@ import { DocumentTypePage } from "@/pages/DocumentTypePage";
 import { PhotoVariationsPage } from "@/pages/PhotoVariationsPage";
 import { DeliveryConfirmationPage } from "@/pages/DeliveryConfirmationPage";
 import { SuccessPageRoute } from "@/pages/SuccessPageRoute";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { handleNetworkError, handleRoutingError, handleImportError } from "@/utils/errorReporting";
 
 const queryClient = new QueryClient();
 
-const getBasePath = () => {
-  // Check if we're in preview mode (different port) or production
-  const isPreview = window.location.port !== '8080' && window.location.port !== '5173';
-  const isProduction = import.meta.env.MODE === "production";
-  
-  if (isProduction) {
-    return "/photoai-beta";
-  } else if (isPreview) {
-    return ""; // Preview should use root path
-  } else {
-    return ""; // Development uses root path
-  }
-};
+// Global error handler for unhandled promise rejections
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+    handleNetworkError(new Error(`Unhandled promise rejection: ${event.reason}`));
+  });
+
+  // Global error handler for general errors
+  window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+    handleNetworkError(event.error || new Error('Unknown global error'));
+  });
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={getBasePath()}>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/unauthorized" element={<NotFound />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/signin" element={<SignInPage />} />
-          
-          {/* Photo flow routes */}
-          <Route path="/photo-capture" element={<PhotoCapturePage />} />
-          <Route path="/document-type" element={<DocumentTypePage />} />
-          <Route path="/photo-variations" element={<PhotoVariationsPage />} />
-          <Route path="/delivery-confirmation" element={<DeliveryConfirmationPage />} />
-          <Route path="/success" element={<SuccessPageRoute />} />
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/unauthorized" element={<NotFound />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signin" element={<SignInPage />} />
+            
+            {/* Photo flow routes */}
+            <Route path="/photo-capture" element={<PhotoCapturePage />} />
+            <Route path="/document-type" element={<DocumentTypePage />} />
+            <Route path="/photo-variations" element={<PhotoVariationsPage />} />
+            <Route path="/delivery-confirmation" element={<DeliveryConfirmationPage />} />
+            <Route path="/success" element={<SuccessPageRoute />} />
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
     </TooltipProvider>
   </QueryClientProvider>
 );

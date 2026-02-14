@@ -7,12 +7,12 @@ export const DocumentTypePage = () => {
 
   const handleSelect = (type: "passport" | "visa" | "id") => {
     updateState({ documentType: type, step: 3 });
-    window.location.href = '/photo-variations';
+    window.location.href = `${import.meta.env.BASE_URL}photo-variations`;
   };
 
   const handleBack = () => {
     updateState({ step: 1 });
-    window.location.href = '/photo-capture';
+    window.location.href = `${import.meta.env.BASE_URL}photo-capture`;
   };
 
   return (

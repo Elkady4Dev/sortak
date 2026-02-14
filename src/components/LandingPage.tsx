@@ -233,7 +233,7 @@ export const LandingPage = ({ onGetStarted, isDemoMode = false, toggleDemoMode }
                   {/* Step image area */}
                   <div className={`w-full aspect-[4/3] ${step.accent} border-[2px] border-retro-dark/20 rounded-lg flex items-center justify-center mb-4 sm:mb-5 overflow-hidden`}>
                     <img 
-                      src={`/images/img${step.step.slice(-1)}.PNG`} 
+                      src={`${import.meta.env.BASE_URL}images/img${step.step.slice(-1)}.PNG`} 
                       alt={step.title}
                       className="w-full h-full object-cover"
                     />

@@ -30,8 +30,8 @@ const Index = () => {
   const { state, updateState } = usePhotoFlowState();
 
   const handleGetStarted = () => {
-    // Navigate to photo capture route
-    window.location.href = '/photo-capture';
+    // Navigate to photo capture route with base path
+    window.location.href = `${import.meta.env.BASE_URL}photo-capture`;
   };
 
   return (

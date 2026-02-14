@@ -7,12 +7,12 @@ export const PhotoCapturePage = () => {
 
   const handlePhotoCapture = (photo: string) => {
     updateState({ capturedPhoto: photo, step: 2 });
-    window.location.href = '/document-type';
+    window.location.href = `${import.meta.env.BASE_URL}document-type`;
   };
 
   const handleBack = () => {
     updateState({ step: 0 });
-    window.location.href = '/';
+    window.location.href = `${import.meta.env.BASE_URL}`;
   };
 
   return (

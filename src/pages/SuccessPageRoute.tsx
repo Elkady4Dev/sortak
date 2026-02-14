@@ -7,12 +7,12 @@ export const SuccessPageRoute = () => {
 
   const handleBack = () => {
     // Go back to delivery confirmation
-    window.location.href = '/delivery-confirmation';
+    window.location.href = `${import.meta.env.BASE_URL}delivery-confirmation`;
   };
 
   const handleStartOver = () => {
     resetState();
-    window.location.href = '/';
+    window.location.href = `${import.meta.env.BASE_URL}`;
   };
 
   return (

@@ -7,17 +7,17 @@ export const DeliveryConfirmationPage = () => {
 
   const handleConfirm = () => {
     updateState({ step: 5 });
-    window.location.href = '/success';
+    window.location.href = `${import.meta.env.BASE_URL}success`;
   };
 
   const handleBack = () => {
     updateState({ step: 3 });
-    window.location.href = '/photo-variations';
+    window.location.href = `${import.meta.env.BASE_URL}photo-variations`;
   };
 
   if (state.selectedVariation === null) {
     // Redirect to variations if no selection
-    window.location.href = '/photo-variations';
+    window.location.href = `${import.meta.env.BASE_URL}photo-variations`;
     return null;
   }
 
