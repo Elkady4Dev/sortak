@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Check, Loader2, AlertCircle } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Check, Loader2, AlertCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -51,6 +51,16 @@ function VariationCard({
 }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const handleDownload = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card selection
+    const link = document.createElement('a');
+    link.href = result.imageDataUrl;
+    link.download = result.filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <button
       onClick={onSelect}
@@ -80,6 +90,15 @@ function VariationCard({
           <Check className="w-5 h-5 text-accent-foreground" />
         </div>
       )}
+
+      {/* Download button - always visible */}
+      <button
+        onClick={handleDownload}
+        className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-retro-dark/80 backdrop-blur-sm flex items-center justify-center hover:bg-retro-dark transition-colors"
+        title="Download this variation"
+      >
+        <Download className="w-4 h-4 text-retro-cream" />
+      </button>
 
       <div className={`absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent transition-opacity ${
         isSelected ? "opacity-100" : "opacity-0"
@@ -119,8 +138,9 @@ function ProgressIndicator({
 interface PhotoVariationsProps {
   documentType: DocumentType;
   originalPhoto: string;
-  onSelectVariation: (index: number) => void;
+  onSelectVariation: (index: number, variationData?: PhotoResult) => void;
   onBack: () => void;
+  isDemoMode?: boolean;
 }
 
 export const PhotoVariations = ({
@@ -128,6 +148,7 @@ export const PhotoVariations = ({
   originalPhoto,
   onSelectVariation,
   onBack,
+  isDemoMode = false,
 }: PhotoVariationsProps) => {
   const {
     jobStatus,
@@ -143,21 +164,59 @@ export const PhotoVariations = ({
   const hasSubmitted = useRef(false);
 
   const documentLabels: Record<DocumentType, string> = {
-    passport: "Passport",
-    visa: "Visa",
-    id: "ID Card",
+    passport: "35mm × 45mm",
+    visa: "50mm × 50mm",
+    id: "Credit Card Size",
   };
 
   const photoTypeMap: Record<DocumentType, string> = {
-    passport: 'Passport (40x60mm)',
-    visa: 'Visa Photo',
-    id: 'ID Card Photo',
+    passport: '35mm × 45mm Photo',
+    visa: '50mm × 50mm Photo',
+    id: 'Credit Card Size Photo',
   };
+
+  // Demo mode - use sample images
+  const demoResults: PhotoResult[] = [
+    {
+      variationId: 1,
+      imageDataUrl: 'https://picsum.photos/300/400?random=photo1',
+      filename: 'demo-variation-1.jpg',
+      mimeType: 'image/jpeg',
+      photoType: photoTypeMap[documentType],
+    },
+    {
+      variationId: 2,
+      imageDataUrl: 'https://picsum.photos/300/400?random=photo2',
+      filename: 'demo-variation-2.jpg',
+      mimeType: 'image/jpeg',
+      photoType: photoTypeMap[documentType],
+    },
+    {
+      variationId: 3,
+      imageDataUrl: 'https://picsum.photos/300/400?random=photo3',
+      filename: 'demo-variation-3.jpg',
+      mimeType: 'image/jpeg',
+      photoType: photoTypeMap[documentType],
+    },
+    {
+      variationId: 4,
+      imageDataUrl: 'https://picsum.photos/300/400?random=photo4',
+      filename: 'demo-variation-4.jpg',
+      mimeType: 'image/jpeg',
+      photoType: photoTypeMap[documentType],
+    },
+  ];
 
   // Submit on mount
   useEffect(() => {
     if (hasSubmitted.current) return;
     hasSubmitted.current = true;
+
+    // In demo mode, use demo results immediately
+    if (isDemoMode) {
+      // Skip the API call entirely and use demo results
+      return;
+    }
 
     const testerToken = getTesterToken();
     if (!testerToken) {
@@ -196,19 +255,33 @@ export const PhotoVariations = ({
     }
   }, [error, completedCount, jobStatus, toast]);
 
-  const isProcessing = jobStatus === 'submitting' || jobStatus === 'processing';
-  const isComplete = jobStatus === 'completed';
-  const isFatalError = (jobStatus === 'failed' || jobStatus === 'timeout') && completedCount === 0;
+  const isProcessing = !isDemoMode && (jobStatus === 'submitting' || jobStatus === 'processing');
+  const isComplete = isDemoMode || jobStatus === 'completed';
+  const isFatalError = !isDemoMode && ((jobStatus === 'failed' || jobStatus === 'timeout') && completedCount === 0);
   const showGrid = !isFatalError;
+  const displayCompletedCount = isDemoMode ? 4 : completedCount;
 
   return (
     <div className="min-h-screen bg-background">
-      <StepHeader
-        step={3}
-        totalSteps={4}
-        title="Choose Your Photo"
-        onBack={onBack}
-      />
+
+      {/* Demo Mode Indicator */}
+      {isDemoMode && (
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl p-4 shadow-lg mb-8 animate-pulse">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Check className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold">Demo Mode Active</h4>
+                  <p className="text-sm opacity-90">Using sample variations for testing</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -235,7 +308,7 @@ export const PhotoVariations = ({
           {showGrid && (
             <div className="animate-slide-up">
               <ProgressIndicator
-                completedCount={completedCount}
+                completedCount={displayCompletedCount}
                 total={totalVariations}
                 isComplete={isComplete}
               />
@@ -243,20 +316,26 @@ export const PhotoVariations = ({
               <p className="text-center text-muted-foreground mb-6">
                 {isComplete
                   ? `Select the variation you prefer. All photos meet ${documentLabels[documentType]} requirements.`
-                  : completedCount > 0
+                  : displayCompletedCount > 0
                     ? 'Select a variation as they arrive. More on the way...'
                     : `Our AI is generating ${documentLabels[documentType].toLowerCase()} photo variations...`}
               </p>
 
               <div className="grid grid-cols-2 gap-4 md:gap-6 mb-8">
                 {[1, 2, 3, 4].map(vid => {
-                  const result = results.get(vid);
+                  // Use demo results if in demo mode, otherwise use hook results
+                  const result = isDemoMode 
+                    ? demoResults.find(r => r.variationId === vid)
+                    : results.get(vid);
                   return result ? (
                     <VariationCard
                       key={vid}
                       result={result}
                       isSelected={selectedVariationId === vid}
-                      onSelect={() => setSelectedVariationId(vid)}
+                      onSelect={() => {
+                        setSelectedVariationId(vid);
+                        onSelectVariation(vid - 1, result);
+                      }}
                     />
                   ) : (
                     <VariationSkeleton key={vid} variationId={vid} />

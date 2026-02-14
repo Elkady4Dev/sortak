@@ -9,7 +9,7 @@ export const ProfilePage = () => {
     {
       id: "ORD-001",
       date: "2024-01-15",
-      type: "Passport Photos",
+      type: "35mm × 45mm Photos",
       status: "completed",
       price: "$24.99",
       delivery: "Digital Download"
@@ -17,7 +17,7 @@ export const ProfilePage = () => {
     {
       id: "ORD-002", 
       date: "2024-01-10",
-      type: "ID Card Photos",
+      type: "50mm × 50mm Photos",
       status: "processing",
       price: "$19.99",
       delivery: "Print + Digital"
@@ -25,7 +25,7 @@ export const ProfilePage = () => {
     {
       id: "ORD-003",
       date: "2024-01-05",
-      type: "Visa Photos",
+      type: "38mm × 48mm Photos",
       status: "completed",
       price: "$29.99",
       delivery: "Express Shipping"
@@ -74,9 +74,9 @@ export const ProfilePage = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-retro-sm ${
-                        order.type === "Passport Photos"
+                        order.type === "35mm × 45mm Photos"
                           ? "bg-retro-teal border-[3px] border-retro-teal"
-                          : order.type === "ID Card Photos"
+                          : order.type === "50mm × 50mm Photos"
                           ? "bg-retro-red border-[3px] border-retro-red"
                           : "bg-retro-mustard border-[3px] border-retro-mustard"
                       }`}>
@@ -148,11 +148,11 @@ export const ProfilePage = () => {
               <div className="sticker bg-retro-dark rounded-xl p-8 shadow-retro-lg text-retro-cream">
                 <h3 className="font-display text-xl mb-6">Account Actions</h3>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button variant="outline" size="lg" className="border-[2px] border-retro-cream hover:bg-retro-cream hover:text-retro-dark">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto border-[2px] border-retro-cream hover:bg-retro-cream hover:text-retro-dark text-retro-cream">
                     <Package className="w-5 h-5 mr-2" />
                     New Order
                   </Button>
-                  <Button variant="outline" size="lg" className="border-[2px] border-retro-cream hover:bg-retro-cream hover:text-retro-dark">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto border-[2px] border-retro-cream hover:bg-retro-cream hover:text-retro-dark text-retro-cream">
                     <User className="w-5 h-5 mr-2" />
                     Edit Profile
                   </Button>

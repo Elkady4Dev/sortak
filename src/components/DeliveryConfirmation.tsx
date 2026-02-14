@@ -4,9 +4,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { StepHeader } from "@/components/StepHeader";
+import type { PhotoResult } from "@/hooks/use-photo-job";
 
 interface DeliveryConfirmationProps {
   selectedVariation: number;
+  selectedVariationData?: PhotoResult;
   wantsPrint: boolean;
   setWantsPrint: (wants: boolean) => void;
   deliveryAddress: string;
@@ -17,6 +19,7 @@ interface DeliveryConfirmationProps {
 
 export const DeliveryConfirmation = ({
   selectedVariation,
+  selectedVariationData,
   wantsPrint,
   setWantsPrint,
   deliveryAddress,
@@ -28,12 +31,6 @@ export const DeliveryConfirmation = ({
 
   return (
     <div className="min-h-screen bg-background">
-      <StepHeader
-        step={4}
-        totalSteps={4}
-        title="Confirm & Delivery"
-        onBack={onBack}
-      />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-xl mx-auto">
@@ -41,9 +38,17 @@ export const DeliveryConfirmation = ({
           <div className="bg-card rounded-2xl p-6 shadow-card mb-6 animate-fade-in">
             <h3 className="font-semibold text-foreground mb-4">Your Selected Photo</h3>
             <div className="aspect-[3/4] max-w-[200px] mx-auto rounded-xl overflow-hidden bg-muted">
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                <span className="text-sm">Variation #{selectedVariation + 1}</span>
-              </div>
+              {selectedVariationData ? (
+                <img
+                  src={selectedVariationData.imageDataUrl}
+                  alt={`Selected variation ${selectedVariation + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                  <span className="text-sm">Variation #{selectedVariation + 1}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -65,23 +70,25 @@ export const DeliveryConfirmation = ({
 
           {/* Print option */}
           <div className="bg-card rounded-2xl p-6 shadow-card mb-6 animate-fade-in">
-            <div className="flex items-start gap-4 mb-4">
-              <Checkbox
-                id="print-option"
-                checked={wantsPrint}
-                onCheckedChange={(checked) => setWantsPrint(checked === true)}
-                className="mt-1"
-              />
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-soft/20 flex items-center justify-center flex-shrink-0">
+                <Printer className="w-6 h-6 text-secondary" />
+              </div>
               <div className="flex-1">
-                <Label htmlFor="print-option" className="flex items-center gap-2 cursor-pointer">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center">
-                    <Printer className="w-5 h-5 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-foreground block">Print & Deliver</span>
-                    <span className="text-sm text-muted-foreground">Professional prints mailed to you</span>
-                  </div>
-                </Label>
+                <div className="flex items-center gap-3 cursor-pointer group">
+                  <Checkbox
+                    id="print-option"
+                    checked={wantsPrint}
+                    onCheckedChange={setWantsPrint}
+                    className="w-5 h-5"
+                  />
+                  <Label htmlFor="print-option" className="flex items-center gap-3 cursor-pointer group">
+                    <div>
+                      <span className="font-semibold text-foreground block group-hover:text-accent transition-colors">Print & Deliver</span>
+                      <span className="text-sm text-muted-foreground">Professional prints mailed to you</span>
+                    </div>
+                  </Label>
+                </div>
               </div>
             </div>
 

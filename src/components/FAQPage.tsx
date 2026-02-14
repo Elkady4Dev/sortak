@@ -13,13 +13,13 @@ interface FAQItem {
 const faqData: FAQItem[] = [
   {
     question: "How does AI-powered photo enhancement work?",
-    answer: "Our AI technology automatically adjusts lighting, removes backgrounds, and optimizes your photo to meet official requirements. It uses advanced algorithms to detect faces and ensure perfect positioning.",
+    answer: "Our AI technology automatically adjusts lighting, removes backgrounds, and optimizes your photo to meet standard requirements. It uses advanced algorithms to detect faces and ensure perfect positioning.",
     category: "Technology",
     icon: Camera
   },
   {
     question: "What countries' photo requirements do you support?",
-    answer: "We support over 150 countries including USA, UK, Canada, Australia, Germany, France, and many more. Each document type is optimized for specific country requirements.",
+    answer: "We support over 150 countries including USA, UK, Canada, Australia, Germany, France, and many more. Each photo size is optimized for specific country requirements.",
     category: "Requirements",
     icon: Shield
   },
@@ -30,12 +30,6 @@ const faqData: FAQItem[] = [
     icon: Clock
   },
   {
-    question: "What if my photo is rejected by authorities?",
-    answer: "We offer a 99.8% acceptance guarantee. If your photo is rejected, we'll either refund your money or help you retake a new photo at no extra charge.",
-    category: "Guarantee",
-    icon: Shield
-  },
-  {
     question: "Is my data secure and private?",
     answer: "Absolutely! All photos are encrypted during processing and automatically deleted from our servers after 24 hours. We never store your personal information longer than necessary.",
     category: "Privacy",
@@ -43,13 +37,13 @@ const faqData: FAQItem[] = [
   },
   {
     question: "Can I use photos taken with other cameras?",
-    answer: "Yes! You can upload existing photos taken with any device. Our AI will optimize them to meet the required specifications for your document type.",
+    answer: "Yes! You can upload existing photos taken with any device. Our AI will optimize them to meet the required specifications for your photo size.",
     category: "Features",
     icon: Camera
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and digital wallets like Apple Pay and Google Pay.",
+    answer: "We accept all major credit cards (Mastercard, American Express), PayPal, and digital wallets like Apple Pay and Google Pay.",
     category: "Payment",
     icon: HelpCircle
   },

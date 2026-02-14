@@ -1,13 +1,16 @@
 import React from "react";
 import { Camera, FileCheck, Printer, ArrowRight, Shield, Clock, Award, Play, Star, Aperture, Film, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Navigation } from "@/components/Navigation";
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  isDemoMode?: boolean;
+  toggleDemoMode?: () => void;
 }
 
-export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
+export const LandingPage = ({ onGetStarted, isDemoMode = false, toggleDemoMode }: LandingPageProps) => {
   return (
     <div className="min-h-screen grain-overlay">
       {/* ===== NAVBAR ===== */}
@@ -27,17 +30,15 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                 </div>
 
                 <h1 className="font-display text-[2.5rem] sm:text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] text-retro-dark leading-[0.9] mb-6 tracking-tight">
-                  GET YOUR
-                  <br />
                   PERFECT
                   <br />
                   <span className="text-retro-red font-display-serif italic text-[2rem] sm:text-[2.5rem] md:text-[3.5rem] lg:text-[5.5rem]">
-                    ID Photo
+                    Photo
                   </span>
                 </h1>
 
                 <p className="text-retro-dark-mid text-sm sm:text-base mb-8 max-w-md leading-relaxed font-medium">
-                  Create passport, visa, and ID photos that meet official requirements.
+                  Create professional photos that meet standard requirements.
                   No studio visit needed — snap, process, done.
                 </p>
 
@@ -47,15 +48,30 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                     <ArrowRight className="ml-1 h-5 w-5" />
                   </Button>
                   <button
-                    className="flex items-center gap-3 group border-[3px] border-retro-dark rounded-lg px-5 py-3 bg-retro-cream shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 w-full sm:w-auto justify-center"
-                    onClick={onGetStarted}
+                    className="text-retro-dark hover:text-retro-teal font-display text-sm tracking-wider uppercase transition-colors duration-150"
                   >
-                    <div className="w-8 h-8 bg-retro-dark rounded-md flex items-center justify-center">
-                      <Play className="w-3.5 h-3.5 text-retro-cream fill-retro-cream ml-0.5" />
-                    </div>
-                    <span className="text-sm font-black uppercase tracking-wider text-retro-dark">Watch Demo</span>
+                    <Play className="inline-block w-4 h-4 mr-2" />
+                    Watch Demo
                   </button>
                 </div>
+
+                {/* Demo Mode Toggle */}
+                <div className="mt-4 flex items-center gap-3 p-3 bg-retro-cream/50 border-[2px] border-retro-dark/20 rounded-lg">
+                  <Switch
+                    checked={isDemoMode}
+                    onCheckedChange={toggleDemoMode}
+                    className="data-[state=checked]:bg-retro-teal"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-display text-retro-dark">
+                      Demo Mode
+                    </span>
+                    <p className="text-xs text-retro-dark-mid">
+                      {isDemoMode ? "Using sample data for testing" : "Real photo processing"}
+                    </p>
+                  </div>
+                </div>
+
               </div>
 
               {/* Right — retro sticker collage */}
@@ -77,7 +93,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                       <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-retro-teal border-[2px] sm:border-[3px] border-retro-dark rounded-lg mx-auto mb-2 sm:mb-3 flex items-center justify-center shadow-retro-sm">
                         <Camera className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-retro-cream" />
                       </div>
-                      <p className="font-display text-sm sm:text-base lg:text-xl text-retro-dark tracking-wide">PASSPORT</p>
+                      <p className="font-display text-sm sm:text-base lg:text-xl text-retro-dark tracking-wide">35MM</p>
                     </div>
                   </div>
                 </div>
@@ -187,8 +203,8 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                 {
                   icon: FileCheck,
                   step: "02", 
-                  title: "CHOOSE DOCUMENT",
-                  desc: "Select passport, visa, or ID type with official sizing and requirements",
+                  title: "CHOOSE SIZE",
+                  desc: "Select the size you need with standard requirements and specifications",
                   bg: "bg-retro-red",
                   accent: "bg-retro-red/10",
                   rotate: "rotate-2",
@@ -209,9 +225,9 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                     index === 1 ? 'sm:col-span-2 lg:col-span-1' : ''
                   }`}
                 >
-                  {/* Step number badge */}
+                  {/* Icon instead of step number */}
                   <div className="absolute -top-4 -right-4 w-12 h-12 sm:w-14 sm:h-14 bg-retro-dark border-[3px] border-retro-dark rounded-full flex items-center justify-center z-10 shadow-retro-sm">
-                    <span className="font-display text-sm sm:text-base text-retro-cream tracking-wider">{step.step}</span>
+                    <step.icon className="w-6 h-6 sm:w-7 sm:h-7 text-retro-cream" />
                   </div>
 
                   {/* Step image area */}
@@ -263,8 +279,8 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
               {[
                 {
                   icon: Shield,
-                  title: "OFFICIAL COMPLIANCE",
-                  desc: "Photos meet all government requirements for passports, visas, and ID documents",
+                  title: "STANDARD COMPLIANCE",
+                  desc: "Photos meet all professional size requirements",
                   color: "bg-retro-red",
                 },
                 {
@@ -383,8 +399,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                     with retro-inspired design to create something truly unique.
                   </p>
                   <p className="text-retro-dark-mid leading-relaxed">
-                    Today, we've helped thousands of people get perfect ID photos for passports, visas, 
-                    and professional documents - all from the comfort of their homes.
+                    Today, we've helped thousands of people get perfect professional photos with various photo sizes - all from the comfort of their homes.
                   </p>
                 </div>
 
@@ -393,7 +408,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                   <ul className="space-y-3">
                     {[
                       "AI-powered perfection guarantee",
-                      "100% government compliance rate", 
+                      "100% professional compliance rate", 
                       "Retro style meets modern tech",
                       "24/7 customer support",
                       "Eco-friendly digital-first approach"

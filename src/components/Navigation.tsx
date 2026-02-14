@@ -39,8 +39,12 @@ export const Navigation = ({
       // For non-landing pages, set active section based on current path
       const currentPath = location.pathname;
       const activeItem = navItems.find(item => item.href === currentPath);
+      
       if (activeItem) {
         setActiveSection(activeItem.id);
+      } else {
+        // For photo flow pages, don't highlight any nav item
+        setActiveSection("");
       }
       return;
     }
@@ -82,17 +86,29 @@ export const Navigation = ({
         }
       }
     } else {
-      // If not on landing page, navigate to page
-      navigate(href);
+      // If not on landing page, handle navigation
+      if (href === "#home" || href === "/") {
+        // Always go to landing page for home
+        navigate("/");
+      } else if (href.startsWith('/')) {
+        // Navigate to other pages
+        navigate(href);
+      } else {
+        // For section links, go to landing page and scroll
+        navigate("/");
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      }
     }
     setIsMobileMenuOpen(false);
   };
 
   const handleLogoClick = () => {
-    if (currentStep !== undefined && currentStep > 0) {
-      // If we're in a step, go back to landing page
-      navigate("/");
-    } else if (isLandingPage) {
+    if (isLandingPage) {
       handleNavClick("#home");
     } else {
       // If we're on any other page, go to home
