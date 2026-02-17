@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
@@ -12,6 +13,7 @@ import { ContactPage } from "@/components/ContactPage";
 import { ProfilePage } from "@/components/ProfilePage";
 import { SignUpPage } from "@/components/SignUpPage";
 import { SignInPage } from "@/components/SignInPage";
+import { DemoPage } from "@/components/DemoPage";
 import { PhotoCapturePage } from "@/pages/PhotoCapturePage";
 import { DocumentTypePage } from "@/pages/DocumentTypePage";
 import { PhotoVariationsPage } from "@/pages/PhotoVariationsPage";
@@ -36,16 +38,18 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AuthProvider>                        {/* ← moved OUTSIDE BrowserRouter */}
-        <ErrorBoundary>
-          <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/unauthorized" element={<NotFound />} />
-              <Route path="/faq" element={<FAQPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/signin" element={<SignInPage />} />
+      <LanguageProvider>
+        <AuthProvider>                        {/* ← moved OUTSIDE BrowserRouter */}
+          <ErrorBoundary>
+            <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/unauthorized" element={<NotFound />} />
+                <Route path="/faq" element={<FAQPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/signin" element={<SignInPage />} />
+                <Route path="/demo" element={<DemoPage />} />
 
               {/* Protected route — requires login */}
               <Route
@@ -69,6 +73,7 @@ const App = () => (
           </BrowserRouter>
         </ErrorBoundary>
       </AuthProvider>
+    </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

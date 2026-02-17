@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Mail, ArrowRight, UserCircle, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { SocialAuthButtons } from "@/components/SocialAuthButtons";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
   const { signIn, resetPassword } = useAuth();
+  const { t, isRTL } = useLanguage();
   
   const [formData, setFormData] = useState({
     email: "",
@@ -111,19 +113,19 @@ export const SignInPage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-retro-red border-[3px] border-retro-dark rounded-lg px-4 py-1.5 shadow-retro-sm mb-6">
               <UserCircle className="w-4 h-4 text-retro-cream" />
-              <span className="font-display text-sm tracking-wider text-retro-cream">SIGN IN</span>
+              <span className="font-display text-sm tracking-wider text-retro-cream">{t('signin.signinBadge')}</span>
             </div>
             
             <h1 className="font-display text-[3rem] md:text-[4.5rem] text-retro-dark leading-[0.9] mb-6 tracking-tight">
-              WELCOME
+              {t('signin.title')}
               <br />
               <span className="font-display-serif italic text-retro-red text-[2rem] md:text-[3rem]">
-                Back
+                {t('signin.back')}
               </span>
             </h1>
             
             <p className="text-retro-dark-mid text-lg max-w-2xl mx-auto font-medium mb-12">
-              Sign in to your PhotoID Pro account to access your profile
+              {t('signin.subtitle')}
             </p>
           </div>
         </div>

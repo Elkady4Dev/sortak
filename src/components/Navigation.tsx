@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Menu, X, User, ChevronDown, LogIn, UserCircle, Package, Aperture, LogOut } from "lucide-react";
+import { ArrowLeft, Menu, X, User, ChevronDown, LogIn, UserCircle, Package, Aperture, LogOut, Globe } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavigationProps {
   currentStep?: number;
@@ -25,21 +26,30 @@ export const Navigation = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { language, setLanguage, t, isRTL } = useLanguage();
 
   const navItems = [
-    { name: "Home", href: "#home", id: "home" },
-    { name: "How it Works", href: "#how-it-works", id: "how-it-works" },
-    { name: "Features", href: "#features", id: "features" },
-    { name: "About", href: "#about", id: "about" },
-    { name: "Pricing", href: "#pricing", id: "pricing" },
-    { name: "FAQ", href: "/faq", id: "faq" },
-    { name: "Contact", href: "/contact", id: "contact" },
+    { name: t('nav.home'), href: "#home", id: "home" },
+    { name: t('nav.howItWorks'), href: "#how-it-works", id: "how-it-works" },
+    { name: t('nav.features'), href: "#features", id: "features" },
+    { name: t('nav.about'), href: "#about", id: "about" },
+    { name: t('nav.pricing'), href: "#pricing", id: "pricing" },
+    { name: t('nav.demo'), href: "/demo", id: "demo" },
+    { name: t('nav.faq'), href: "/faq", id: "faq" },
+    { name: t('nav.contact'), href: "/contact", id: "contact" },
   ];
 
   useEffect(() => {
     if (!isLandingPage) {
       // For non-landing pages, set active section based on current path
       const currentPath = location.pathname;
+      
+      // Don't highlight any nav items for demo page
+      if (currentPath === '/demo') {
+        setActiveSection("");
+        return;
+      }
+      
       const activeItem = navItems.find(item => item.href === currentPath);
       
       if (activeItem) {
@@ -158,6 +168,15 @@ export const Navigation = ({
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
+            {/* Language Toggle */}
+            <button
+              onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
+              className="w-10 h-10 bg-retro-mustard border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+              title={t('language')}
+            >
+              <Globe className="w-5 h-5 text-retro-dark" />
+            </button>
+            
             {showBackButton && onBack && (
               <Button
                 variant="outline"
@@ -172,7 +191,7 @@ export const Navigation = ({
             
             {isLandingPage && onGetStarted && (
               <Button variant="hero" size="default" onClick={onGetStarted}>
-                Get Started
+                {t('nav.getStarted')}
               </Button>
             )}
             
@@ -187,7 +206,7 @@ export const Navigation = ({
               
               {/* Dropdown Menu */}
               {isProfileOpen && (
-                <div className="absolute right-0 top-12 w-48 bg-retro-cream border-[3px] border-retro-dark rounded-lg shadow-retro-lg z-50">
+                <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-12 w-48 bg-retro-cream border-[3px] border-retro-dark rounded-lg shadow-retro-lg z-50`}>
                   <div className="py-2">
                     {user ? (
                       // Logged-in: show profile + sign out
@@ -200,14 +219,14 @@ export const Navigation = ({
                           className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
                         >
                           <Package className="w-4 h-4" />
-                          <span className="font-medium">My Profile</span>
+                          <span className="font-medium">{t('nav.myProfile')}</span>
                         </button>
                         <button
                           onClick={handleSignOut}
                           className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-red hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
                         >
                           <LogOut className="w-4 h-4" />
-                          <span className="font-medium">Sign Out</span>
+                          <span className="font-medium">{t('nav.signOut')}</span>
                         </button>
                       </>
                     ) : (
@@ -221,7 +240,7 @@ export const Navigation = ({
                           className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
                         >
                           <LogIn className="w-4 h-4" />
-                          <span className="font-medium">Sign Up</span>
+                          <span className="font-medium">{t('nav.signUp')}</span>
                         </button>
                         <button
                           onClick={() => {
@@ -231,7 +250,7 @@ export const Navigation = ({
                           className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
                         >
                           <UserCircle className="w-4 h-4" />
-                          <span className="font-medium">Sign In</span>
+                          <span className="font-medium">{t('nav.signIn')}</span>
                         </button>
                       </>
                     )}

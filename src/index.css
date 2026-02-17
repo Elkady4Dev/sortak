@@ -280,6 +280,33 @@
   .animate-retro-pulse {
     animation: retro-pulse 2s ease-in-out infinite;
   }
+
+  /* Text carousel animations */
+  .animate-text-carousel {
+    animation: text-carousel 10s ease-in-out infinite;
+  }
+
+  /* Individual float animations for emoji circles */
+  .animate-float-1 {
+    animation: float-1 4s ease-in-out infinite;
+  }
+
+  .animate-float-2 {
+    animation: float-2 4s ease-in-out infinite;
+  }
+
+  .animate-float-3 {
+    animation: float-3 4s ease-in-out infinite;
+  }
+
+  .animate-float-4 {
+    animation: float-4 4s ease-in-out infinite;
+  }
+
+  /* Number counting animation */
+  .animate-number {
+    animation: number-count 2s ease-out;
+  }
 }
 
 @keyframes float {
@@ -322,4 +349,151 @@
 @keyframes retro-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
+}
+
+@keyframes text-carousel {
+  0%, 20% { transform: translateX(0); }
+  25%, 45% { transform: translateX(-100%); }
+  50%, 70% { transform: translateX(-200%); }
+  75%, 95% { transform: translateX(-300%); }
+  100% { transform: translateX(-400%); }
+}
+
+@keyframes float-1 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(-3deg); }
+}
+
+@keyframes float-3 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(7deg); }
+}
+
+@keyframes float-4 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-5deg); }
+}
+
+@keyframes number-count {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ===== RTL SUPPORT ===== */
+.rtl {
+  direction: rtl;
+}
+
+.rtl .font-display {
+  font-family: 'Bebas Neue', 'Noto Kufi Arabic', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  transform: skew(0deg, 0deg); /* Fix slanted text in RTL */
+}
+
+/* RTL Layout Adjustments */
+.rtl .flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.rtl .text-right {
+  text-align: left;
+}
+
+.rtl .text-left {
+  text-align: right;
+}
+
+.rtl .ml-1 { margin-left: 0; margin-right: 0.25rem; }
+.rtl .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+.rtl .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+.rtl .ml-4 { margin-left: 0; margin-right: 1rem; }
+.rtl .ml-5 { margin-left: 0; margin-right: 1.25rem; }
+.rtl .ml-6 { margin-left: 0; margin-right: 1.5rem; }
+.rtl .ml-8 { margin-left: 0; margin-right: 2rem; }
+
+.rtl .mr-1 { margin-right: 0; margin-left: 0.25rem; }
+.rtl .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+.rtl .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+.rtl .mr-4 { margin-right: 0; margin-left: 1rem; }
+.rtl .mr-5 { margin-right: 0; margin-left: 1.25rem; }
+.rtl .mr-6 { margin-right: 0; margin-left: 1.5rem; }
+.rtl .mr-8 { margin-right: 0; margin-left: 2rem; }
+
+.rtl .pl-1 { padding-left: 0; padding-right: 0.25rem; }
+.rtl .pl-2 { padding-left: 0; padding-right: 0.5rem; }
+.rtl .pl-3 { padding-left: 0; padding-right: 0.75rem; }
+.rtl .pl-4 { padding-left: 0; padding-right: 1rem; }
+.rtl .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+.rtl .pl-8 { padding-left: 0; padding-right: 2rem; }
+
+.rtl .pr-1 { padding-right: 0; padding-left: 0.25rem; }
+.rtl .pr-2 { padding-right: 0; padding-left: 0.5rem; }
+.rtl .pr-3 { padding-right: 0; padding-left: 0.75rem; }
+.rtl .pr-4 { padding-right: 0; padding-left: 1rem; }
+.rtl .pr-6 { padding-right: 0; padding-left: 1.5rem; }
+.rtl .pr-8 { padding-right: 0; padding-left: 2rem; }
+
+/* RTL Team Grid Fix */
+.rtl-team-grid {
+  direction: ltr;
+}
+
+.rtl-team-grid > div {
+  direction: rtl;
+}
+
+/* Mobile (2 cols) */
+.rtl-team-grid > div:nth-child(1) { order: 2; }
+.rtl-team-grid > div:nth-child(2) { order: 1; }
+
+/* Tablet (3 cols) */
+@media (min-width: 768px) {
+  .rtl-team-grid > div:nth-child(1) { order: 3; }
+  .rtl-team-grid > div:nth-child(2) { order: 2; }
+  .rtl-team-grid > div:nth-child(3) { order: 1; }
+}
+
+/* Desktop (6 cols) */
+@media (min-width: 1024px) {
+  .rtl-team-grid > div:nth-child(1) { order: 6; }
+  .rtl-team-grid > div:nth-child(2) { order: 5; }
+  .rtl-team-grid > div:nth-child(3) { order: 4; }
+  .rtl-team-grid > div:nth-child(4) { order: 3; }
+  .rtl-team-grid > div:nth-child(5) { order: 2; }
+  .rtl-team-grid > div:nth-child(6) { order: 1; }
+}
+
+/* RTL Grid and Flexbox - Removed conflicting grid-column styles for team grid */
+
+/* RTL Animations */
+.rtl .animate-slide-up {
+  animation: slide-up-rtl 0.6s ease-out both;
+}
+
+@keyframes slide-up-rtl {
+  from {
+    opacity: 0;
+    transform: translateY(24px) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* RTL Specific Components */
+.rtl .sticker {
+  transform: rotate(-1deg);
+}
+
+.rtl .sticker:hover {
+  transform: rotate(1deg) translate(-2px, 2px);
 }

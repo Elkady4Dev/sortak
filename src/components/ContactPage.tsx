@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Send, User, MessageSquare } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 export const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -12,28 +14,30 @@ export const ContactPage = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { t, isRTL } = useLanguage();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = t('contact.nameRequired');
     }
     
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t('contact.emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = t('contact.emailInvalid');
     }
     
     if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
+      newErrors.subject = t('contact.subjectRequired');
     }
     
     if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
+      newErrors.message = t('contact.messageRequired');
     } else if (formData.message.length < 10) {
-      newErrors.message = "Message must be at least 10 characters";
+      newErrors.message = t('contact.messageMinLength');
     }
     
     setErrors(newErrors);
@@ -47,7 +51,7 @@ export const ContactPage = () => {
       // Handle successful contact submission
       console.log("Contact form submitted:", formData);
       // In a real app, this would make an API call
-      alert("Message sent! We'll get back to you within 24 hours.");
+      alert(t('contact.successMessage'));
       setFormData({ name: "", email: "", subject: "", message: "" });
     }
   };
@@ -66,15 +70,15 @@ export const ContactPage = () => {
             </div>
             
             <h1 className="font-display text-[3rem] md:text-[4.5rem] text-retro-dark leading-[0.9] mb-6 tracking-tight">
-              GET IN
+              {t('contact.title')}
               <br />
               <span className="font-display-serif italic text-retro-red text-[2rem] md:text-[3rem]">
-                Touch
+                {t('contact.subtitle')}
               </span>
             </h1>
             
             <p className="text-retro-dark-mid text-lg max-w-2xl mx-auto font-medium mb-12">
-              Have questions about our AI-powered ID photo service? We're here to help!
+              {t('contact.description')}
             </p>
           </div>
         </div>
@@ -92,14 +96,14 @@ export const ContactPage = () => {
                     {/* Name Field */}
                     <div>
                       <label className="block text-retro-dark font-display text-sm mb-2 lg:mb-3 tracking-wider">
-                        FULL NAME
+                        {t('contact.fullName')}
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         className="w-full px-4 py-3 lg:py-4 border-[2px] border-retro-dark rounded-lg bg-retro-cream/50 focus:outline-none focus:ring-2 focus:ring-retro-mustard focus:ring-offset-2 font-medium text-retro-dark placeholder-retro-dark/30"
-                        placeholder="Enter your full name"
+                        placeholder={t('contact.namePlaceholder')}
                       />
                       {errors.name && (
                         <p className="text-retro-red text-sm mt-1">{errors.name}</p>
@@ -109,14 +113,14 @@ export const ContactPage = () => {
                     {/* Email Field */}
                     <div>
                       <label className="block text-retro-dark font-display text-sm mb-2 lg:mb-3 tracking-wider">
-                        EMAIL ADDRESS
+                        {t('contact.emailAddress')}
                       </label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="w-full px-4 py-3 lg:py-4 border-[2px] border-retro-dark rounded-lg bg-retro-cream/50 focus:outline-none focus:ring-2 focus:ring-retro-mustard focus:ring-offset-2 font-medium text-retro-dark placeholder-retro-dark/30"
-                        placeholder="your@email.com"
+                        placeholder={t('contact.emailPlaceholder')}
                       />
                       {errors.email && (
                         <p className="text-retro-red text-sm mt-1">{errors.email}</p>
@@ -126,14 +130,14 @@ export const ContactPage = () => {
                     {/* Subject Field */}
                     <div>
                       <label className="block text-retro-dark font-display text-sm mb-2 lg:mb-3 tracking-wider">
-                        SUBJECT
+                        {t('contact.subjectField')}
                       </label>
                       <input
                         type="text"
                         value={formData.subject}
                         onChange={(e) => setFormData({...formData, subject: e.target.value})}
                         className="w-full px-4 py-3 lg:py-4 border-[2px] border-retro-dark rounded-lg bg-retro-cream/50 focus:outline-none focus:ring-2 focus:ring-retro-mustard focus:ring-offset-2 font-medium text-retro-dark placeholder-retro-dark/30"
-                        placeholder="How can we help you?"
+                        placeholder={t('contact.subjectPlaceholder')}
                       />
                       {errors.subject && (
                         <p className="text-retro-red text-sm mt-1">{errors.subject}</p>
@@ -143,14 +147,14 @@ export const ContactPage = () => {
                     {/* Message Field */}
                     <div>
                       <label className="block text-retro-dark font-display text-sm mb-2 lg:mb-3 tracking-wider">
-                        MESSAGE
+                        {t('contact.messageField')}
                       </label>
                       <textarea
                         value={formData.message}
                         onChange={(e) => setFormData({...formData, message: e.target.value})}
                         rows={6}
                         className="w-full px-4 py-3 lg:py-4 border-[2px] border-retro-dark rounded-lg bg-retro-cream/50 focus:outline-none focus:ring-2 focus:ring-retro-mustard focus:ring-offset-2 font-medium text-retro-dark placeholder-retro-dark/30 resize-none"
-                        placeholder="Tell us more about your question or feedback..."
+                        placeholder={t('contact.messagePlaceholder')}
                       />
                       {errors.message && (
                         <p className="text-retro-red text-sm mt-1">{errors.message}</p>
@@ -164,8 +168,8 @@ export const ContactPage = () => {
                       size="lg"
                       className="w-full lg:w-auto"
                     >
-                      <Send className="w-5 h-5 mr-2" />
-                      Send Message
+                      <Send className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t('contact.sendMessage')}
                     </Button>
                   </form>
                 </div>
@@ -175,26 +179,26 @@ export const ContactPage = () => {
               <div className="space-y-8 lg:space-y-10">
                 {/* Quick Contact */}
                 <div className="sticker bg-retro-dark rounded-xl p-6 lg:p-8 shadow-retro-lg text-retro-cream">
-                  <h3 className="font-display text-xl lg:text-2xl mb-4 lg:mb-6">Quick Contact</h3>
+                  <h3 className="font-display text-xl lg:text-2xl mb-4 lg:mb-6">{t('contact.quickContact')}</h3>
                   <div className="space-y-4 lg:space-y-6">
                     <div className="flex items-center gap-3 lg:gap-4">
                       <Mail className="w-5 h-5 lg:w-6 lg:h-6 text-retro-cream" />
                       <div>
-                        <div className="font-medium text-base lg:text-lg">Email</div>
+                        <div className="font-medium text-base lg:text-lg">{t('contact.email')}</div>
                         <div className="text-retro-cream/70 text-sm lg:text-base">support@photoid.pro</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 lg:gap-4">
                       <Phone className="w-5 h-5 lg:w-6 lg:h-6 text-retro-cream" />
                       <div>
-                        <div className="font-medium text-base lg:text-lg">Phone</div>
+                        <div className="font-medium text-base lg:text-lg">{t('contact.phone')}</div>
                         <div className="text-retro-cream/70 text-sm lg:text-base">1-800-PHOTO-ID</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 lg:gap-4">
                       <MapPin className="w-5 h-5 lg:w-6 lg:h-6 text-retro-cream" />
                       <div>
-                        <div className="font-medium text-base lg:text-lg">Hours</div>
+                        <div className="font-medium text-base lg:text-lg">{t('contact.hours')}</div>
                         <div className="text-retro-cream/70 text-sm lg:text-base">Mon-Fri 9AM-6PM EST</div>
                       </div>
                     </div>
@@ -205,20 +209,20 @@ export const ContactPage = () => {
                 <div className="sticker bg-retro-teal rounded-xl p-6 lg:p-8 shadow-retro-lg">
                   <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6">
                     <MessageSquare className="w-6 h-6 lg:w-7 lg:h-7 text-retro-cream" />
-                    <h4 className="font-display text-lg lg:text-xl text-retro-cream">Response Time</h4>
+                    <h4 className="font-display text-lg lg:text-xl text-retro-cream">{t('contact.responseTime')}</h4>
                   </div>
                   <div className="space-y-2 lg:space-y-3 text-retro-cream">
                     <div className="flex justify-between">
-                      <span className="text-sm lg:text-base">Email Support:</span>
-                      <span className="font-medium text-sm lg:text-base">Within 24 hours</span>
+                      <span className="text-sm lg:text-base">{t('contact.emailSupport')}</span>
+                      <span className="font-medium text-sm lg:text-base">{t('contact.within24Hours')}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm lg:text-base">Phone Support:</span>
-                      <span className="font-medium text-sm lg:text-base">Business hours only</span>
+                      <span className="text-sm lg:text-base">{t('contact.phoneSupport')}</span>
+                      <span className="font-medium text-sm lg:text-base">{t('contact.businessHours')}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm lg:text-base">Emergency:</span>
-                      <span className="font-medium text-retro-mustard text-sm lg:text-base">Priority support available</span>
+                      <span className="text-sm lg:text-base">{t('contact.emergency')}</span>
+                      <span className="font-medium text-retro-mustard text-sm lg:text-base">{t('contact.prioritySupport')}</span>
                     </div>
                   </div>
                 </div>
@@ -227,19 +231,19 @@ export const ContactPage = () => {
                 <div className="sticker bg-retro-red rounded-xl p-6 lg:p-8 shadow-retro-lg">
                   <div className="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-6">
                     <MapPin className="w-6 h-6 lg:w-7 lg:h-7 text-retro-cream" />
-                    <h4 className="font-display text-lg lg:text-xl text-retro-cream">Office Locations</h4>
+                    <h4 className="font-display text-lg lg:text-xl text-retro-cream">{t('contact.officeLocations')}</h4>
                   </div>
                   <div className="space-y-2 lg:space-y-3 text-retro-cream">
                     <div>
-                      <div className="font-medium text-sm lg:text-base">North America</div>
+                      <div className="font-medium text-sm lg:text-base">{t('contact.northAmerica')}</div>
                       <div className="text-retro-cream/70 text-sm lg:text-base">New York, Los Angeles, Toronto</div>
                     </div>
                     <div>
-                      <div className="font-medium text-sm lg:text-base">Europe</div>
+                      <div className="font-medium text-sm lg:text-base">{t('contact.europe')}</div>
                       <div className="text-retro-cream/70 text-sm lg:text-base">London, Paris, Berlin</div>
                     </div>
                     <div>
-                      <div className="font-medium text-sm lg:text-base">Asia Pacific</div>
+                      <div className="font-medium text-sm lg:text-base">{t('contact.asiaPacific')}</div>
                       <div className="text-retro-cream/70 text-sm lg:text-base">Tokyo, Sydney, Singapore</div>
                     </div>
                   </div>

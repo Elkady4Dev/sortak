@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, HelpCircle, Mail, Phone, Shield, Clock, Camera } from "lucide-react";
+import { ChevronDown, ChevronUp, HelpCircle, Mail, Phone, Shield, Clock, Camera, CreditCard, Award } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 interface FAQItem {
   question: string;
@@ -10,66 +12,63 @@ interface FAQItem {
   icon: React.ComponentType<any>;
 }
 
-const faqData: FAQItem[] = [
-  {
-    question: "How does AI-powered photo enhancement work?",
-    answer: "Our AI technology automatically adjusts lighting, removes backgrounds, and optimizes your photo to meet standard requirements. It uses advanced algorithms to detect faces and ensure perfect positioning.",
-    category: "Technology",
-    icon: Camera
-  },
-  {
-    question: "What countries' photo requirements do you support?",
-    answer: "We support over 150 countries including USA, UK, Canada, Australia, Germany, France, and many more. Each photo size is optimized for specific country requirements.",
-    category: "Requirements",
-    icon: Shield
-  },
-  {
-    question: "How quickly will I receive my photos?",
-    answer: "Instant delivery! Once processed, your photos are available for immediate download. Print delivery takes 2-5 business days depending on your location.",
-    category: "Delivery",
-    icon: Clock
-  },
-  {
-    question: "Is my data secure and private?",
-    answer: "Absolutely! All photos are encrypted during processing and automatically deleted from our servers after 24 hours. We never store your personal information longer than necessary.",
-    category: "Privacy",
-    icon: Shield
-  },
-  {
-    question: "Can I use photos taken with other cameras?",
-    answer: "Yes! You can upload existing photos taken with any device. Our AI will optimize them to meet the required specifications for your photo size.",
-    category: "Features",
-    icon: Camera
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards (Mastercard, American Express), PayPal, and digital wallets like Apple Pay and Google Pay.",
-    category: "Payment",
-    icon: HelpCircle
-  },
-  {
-    question: "Do you offer bulk discounts for businesses?",
-    answer: "Yes! We offer special pricing for businesses needing multiple photos. Contact our sales team for custom enterprise solutions.",
-    category: "Pricing",
-    icon: HelpCircle
-  },
-  {
-    question: "How do I contact customer support?",
-    answer: "You can reach our support team via email at support@photoid.pro, through our contact form, or by phone at 1-800-PHOTO-ID during business hours.",
-    category: "Support",
-    icon: Phone
-  }
-];
-
 export const FAQPage = () => {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+  const { t, isRTL } = useLanguage();
+  const navigate = useNavigate();
 
-  const categories = ["all", "Technology", "Requirements", "Delivery", "Guarantee", "Privacy", "Features", "Payment", "Pricing", "Support"];
+  const faqData: FAQItem[] = [
+    {
+      question: t('faq.q1.question'),
+      answer: t('faq.q1.answer'),
+      category: "Technology",
+      icon: Camera
+    },
+    {
+      question: t('faq.q2.question'),
+      answer: t('faq.q2.answer'),
+      category: "Requirements",
+      icon: Shield
+    },
+    {
+      question: t('faq.q3.question'),
+      answer: t('faq.q3.answer'),
+      category: "Delivery",
+      icon: Clock
+    },
+    {
+      question: t('faq.q4.question'),
+      answer: t('faq.q4.answer'),
+      category: "Privacy",
+      icon: Shield
+    },
+    {
+      question: t('faq.q5.question'),
+      answer: t('faq.q5.answer'),
+      category: "Features",
+      icon: Camera
+    },
+    {
+      question: t('faq.q6.question'),
+      answer: t('faq.q6.answer'),
+      category: "Payment",
+      icon: CreditCard
+    },
+    {
+      question: t('faq.q7.question'),
+      answer: t('faq.q7.answer'),
+      category: "Guarantee",
+      icon: Award
+    },
+    {
+      question: t('faq.q8.question'),
+      answer: t('faq.q8.answer'),
+      category: "Delivery",
+      icon: Clock
+    }
+  ];
 
-  const filteredFAQs = activeCategory === "all" 
-    ? faqData 
-    : faqData.filter(faq => faq.category === activeCategory);
+  const filteredFAQs = faqData; // Show all FAQs without filtering
 
   const toggleExpand = (index: number) => {
     setExpandedItems(prev => {
@@ -77,6 +76,8 @@ export const FAQPage = () => {
       if (newSet.has(index)) {
         newSet.delete(index);
       } else {
+        // Clear all other expanded items and only expand the clicked one
+        newSet.clear();
         newSet.add(index);
       }
       return newSet;
@@ -97,55 +98,16 @@ export const FAQPage = () => {
             </div>
             
             <h1 className="font-display text-[3rem] md:text-[4.5rem] text-retro-dark leading-[0.9] mb-6 tracking-tight">
-              FREQUENTLY ASKED
+              {t('faq.title')}
               <br />
               <span className="font-display-serif italic text-retro-red text-[2rem] md:text-[3rem]">
-                Questions
+                {t('faq.subtitle')}
               </span>
             </h1>
             
             <p className="text-retro-dark-mid text-lg max-w-2xl mx-auto font-medium mb-12">
-              Find answers to common questions about our AI-powered ID photo service.
+              {t('faq.description')}
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Category Filter */}
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 rounded-lg border-[2px] font-display text-sm tracking-wider transition-all duration-150 ${
-                    activeCategory === category
-                      ? category === "all" 
-                        ? "bg-retro-dark text-retro-cream border-retro-dark"
-                        : category === "Technology"
-                        ? "bg-retro-teal text-retro-cream border-retro-teal"
-                        : category === "Requirements"
-                        ? "bg-retro-red text-retro-cream border-retro-red"
-                        : category === "Delivery"
-                        ? "bg-retro-mustard text-retro-dark border-retro-mustard"
-                        : category === "Guarantee"
-                        ? "bg-retro-pink text-retro-cream border-retro-pink"
-                        : category === "Privacy"
-                        ? "bg-retro-olive text-retro-cream border-retro-olive"
-                        : category === "Features"
-                        ? "bg-retro-orange text-retro-cream border-retro-orange"
-                        : category === "Payment"
-                        ? "bg-retro-burgundy text-retro-cream border-retro-burgundy"
-                        : "bg-retro-brown text-retro-cream border-retro-brown"
-                      : "bg-retro-cream text-retro-dark border-retro-dark hover:bg-retro-dark hover:text-retro-cream"
-                  }`}
-                >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -153,8 +115,8 @@ export const FAQPage = () => {
       {/* FAQ Items */}
       <section className="py-12 pb-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="max-w-3xl mx-auto">
+            <div className="space-y-6">
               {filteredFAQs.map((faq, index) => (
                 <div 
                   key={index} 
@@ -238,27 +200,29 @@ export const FAQPage = () => {
           <div className="max-w-2xl mx-auto text-center">
             <div className="sticker bg-retro-dark rounded-xl p-8 shadow-retro-lg">
               <h3 className="font-display text-2xl text-retro-cream mb-4">
-                Still Need Help?
+                {t('faq.stillNeedHelp')}
               </h3>
               <p className="text-retro-cream/70 text-base mb-6 leading-relaxed">
-                Can't find what you're looking for? Our support team is here to help you get your perfect ID photo.
+                {t('faq.stillNeedHelpDesc')}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button 
                   variant="outline" 
                   size="lg"
+                  onClick={() => navigate('/contact')}
                   className="w-full sm:w-auto border-[2px] border-retro-cream hover:bg-retro-cream hover:text-retro-dark text-retro-cream"
                 >
-                  <Mail className="w-5 h-5 mr-2" />
-                  Email Support
+                  <Mail className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                  {t('faq.emailSupport')}
                 </Button>
                 <Button 
                   variant="hero" 
                   size="lg"
+                  onClick={() => navigate('/contact')}
                   className="w-full sm:w-auto"
                 >
-                  <Phone className="w-5 h-5 mr-2" />
-                  Call Us
+                  <Phone className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                  {t('faq.callUs')}
                 </Button>
               </div>
             </div>
