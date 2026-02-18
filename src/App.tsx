@@ -19,9 +19,9 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { handleNetworkError } from "@/utils/errorReporting";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-// --- ADD THIS IMPORT ---
 import { LanguageProvider } from "@/contexts/LanguageContext"; 
 import { DemoPage } from "./components/DemoPage";
+import { TokenPreserver } from "./components/tokenPreserver";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +48,7 @@ const App = () => (
         <ErrorBoundary>
           <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
             <AuthProvider>
+              <TokenPreserver />
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
