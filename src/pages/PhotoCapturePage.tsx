@@ -1,11 +1,14 @@
 import { PhotoCapture } from "@/components/PhotoCapture";
 import { usePhotoFlowState } from "@/hooks/usePhotoFlowState";
 import { Navigation } from "@/components/Navigation";
+import { useTokenNavigation } from '@/hooks/useTokenNavigation';
 
 export const PhotoCapturePage = () => {
   const { state, updateState } = usePhotoFlowState();
+  const { navigateWithToken, getCurrentToken } = useTokenNavigation();
 
   const handlePhotoCapture = (photo: string) => {
+    navigateWithToken('/document-type');
     const updates = { capturedPhoto: photo, step: 2 };
     updateState(updates);
 

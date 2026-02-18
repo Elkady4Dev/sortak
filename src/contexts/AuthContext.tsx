@@ -7,6 +7,11 @@ export interface Profile {
   email: string;
   full_name: string | null;
   avatar_url: string | null;
+  token: string | null;
+  max_gens: number;
+  used_gens: number;
+  is_active: boolean;
+  last_used_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -22,6 +27,16 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>;
+  useGeneration: () => Promise<{ allowed: boolean; remaining: number; error?: string }>;
+  getTokenInfo: () => Promise<TokenInfo | null>;
+}
+
+interface TokenInfo {
+  token: string;
+  max_gens: number;
+  used_gens: number;
+  remaining: number;
+  last_used_at: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -107,6 +122,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Use a generation (decrements remaining count)
+  const useGeneration = async () => {
+    if (!user) {
+      return { allowed: false, remaining: 0, error: 'Not logged in' };
+    }
+
+    try {
+      const { data, error } = await supabase
+        .rpc('use_generation', { p_user_id: user.id });
+
+      if (error) throw error;
+
+      const result = data[0];
+      
+      // Refresh profile to update used_gens count
+      await fetchProfile(user.id);
+
+      return {
+        allowed: result.allowed,
+        remaining: result.remaining,
+        error: result.error_code || undefined,
+      };
+    } catch (error) {
+      console.error('Error using generation:', error);
+      return { allowed: false, remaining: 0, error: 'Failed to use generation' };
+    }
+  };
+
+  // Get detailed token/generation info
+  const getTokenInfo = async (): Promise<TokenInfo | null> => {
+    if (!user) return null;
+
+    try {
+      const { data, error } = await supabase
+        .rpc('get_token_info', { p_user_id: user.id });
+
+      if (error) throw error;
+      return data?.[0] || null;
+    } catch (error) {
+      console.error('Error fetching token info:', error);
+      return null;
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -143,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       user, profile, session, loading,
       signUp, signIn, signInWithOAuth,
       signOut, resetPassword, updateProfile,
+      useGeneration, getTokenInfo,
     }}>
       {children}
     </AuthContext.Provider>
