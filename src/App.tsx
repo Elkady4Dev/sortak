@@ -21,6 +21,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 // --- ADD THIS IMPORT ---
 import { LanguageProvider } from "@/contexts/LanguageContext"; 
+import { DemoPage } from "./components/DemoPage";
 
 const queryClient = new QueryClient();
 
@@ -55,7 +56,8 @@ const App = () => (
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signin" element={<SignInPage />} />
-                
+                <Route path="/demo" element={<DemoPage />} />
+
                 {/* Protected routes */}
                 <Route 
                   path="/profile" 
