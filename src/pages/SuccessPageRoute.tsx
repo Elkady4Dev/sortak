@@ -1,18 +1,19 @@
 import { SuccessPage } from "@/components/SuccessPage";
 import { usePhotoFlowState } from "@/hooks/usePhotoFlowState";
 import { Navigation } from "@/components/Navigation";
+import { useTokenNavigation } from "@/hooks/useTokenNavigation";
 
 export const SuccessPageRoute = () => {
   const { state, resetState } = usePhotoFlowState();
+  const { navigateWithToken } = useTokenNavigation();
 
   const handleBack = () => {
-    // Go back to delivery confirmation
-    window.location.href = `${import.meta.env.BASE_URL}delivery-confirmation`;
+    navigateWithToken('/delivery-confirmation');
   };
 
   const handleStartOver = () => {
     resetState();
-    window.location.href = `${import.meta.env.BASE_URL}`;
+    navigateWithToken('/');
   };
 
   return (

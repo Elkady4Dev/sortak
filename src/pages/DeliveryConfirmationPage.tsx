@@ -1,23 +1,24 @@
 import { DeliveryConfirmation } from "@/components/DeliveryConfirmation";
 import { usePhotoFlowState } from "@/hooks/usePhotoFlowState";
 import { Navigation } from "@/components/Navigation";
+import { useTokenNavigation } from "@/hooks/useTokenNavigation";
 
 export const DeliveryConfirmationPage = () => {
   const { state, updateState } = usePhotoFlowState();
+  const { navigateWithToken } = useTokenNavigation();
 
   const handleConfirm = () => {
     updateState({ step: 5 });
-    window.location.href = `${import.meta.env.BASE_URL}success`;
+    navigateWithToken('/success');
   };
 
   const handleBack = () => {
     updateState({ step: 3 });
-    window.location.href = `${import.meta.env.BASE_URL}photo-variations`;
+    navigateWithToken('/photo-variations');
   };
 
   if (state.selectedVariation === null) {
-    // Redirect to variations if no selection
-    window.location.href = `${import.meta.env.BASE_URL}photo-variations`;
+    navigateWithToken('/photo-variations');
     return null;
   }
 
