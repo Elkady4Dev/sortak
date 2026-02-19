@@ -1,11 +1,14 @@
 import { DocumentTypeSelection } from "@/components/DocumentTypeSelection";
 import { usePhotoFlowState } from "@/hooks/usePhotoFlowState";
 import { Navigation } from "@/components/Navigation";
+import { useTokenNavigation } from '@/hooks/useTokenNavigation';
 
 export const DocumentTypePage = () => {
   const { state, updateState } = usePhotoFlowState();
+  const { navigateWithToken, getCurrentToken } = useTokenNavigation();
 
   const handleSelect = (type: "passport" | "visa" | "id") => {
+    navigateWithToken('/photo-variations');
     const updates = { documentType: type, step: 3 };
     updateState(updates);
 
