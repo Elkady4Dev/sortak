@@ -168,6 +168,38 @@ export const Navigation = ({
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
+            {/* Get Started - Always visible */}
+            {!isLandingPage && (
+              <Button 
+                variant="hero" 
+                size="default" 
+                onClick={() => navigate('/')}
+                className="hidden md:flex bg-retro-red hover:bg-retro-red/90 border-retro-red shadow-retro-lg hover:shadow-retro-xl transform hover:scale-105 transition-all duration-200"
+              >
+                {t('nav.getStarted')}
+              </Button>
+            )}
+            
+            {/* Get Started - Prominent on Landing */}
+            {isLandingPage && onGetStarted && (
+              <Button 
+                variant="hero" 
+                size="default" 
+                onClick={onGetStarted}
+                className="hidden md:flex bg-retro-red hover:bg-retro-red/90 border-retro-red shadow-retro-lg hover:shadow-retro-xl transform hover:scale-105 transition-all duration-200"
+              >
+                {t('nav.getStarted')}
+              </Button>
+            )}
+            
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden w-10 h-10 bg-retro-dark border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5 text-retro-cream" /> : <Menu className="w-5 h-5 text-retro-cream" />}
+            </button>
+            
             {/* Language Toggle */}
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
@@ -177,87 +209,71 @@ export const Navigation = ({
               <Globe className="w-5 h-5 text-retro-dark" />
             </button>
             
-            {showBackButton && onBack && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onBack}
-                className="hidden md:flex items-center gap-2 border-[2px] border-retro-dark hover:bg-retro-dark hover:text-retro-cream"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back
-              </Button>
-            )}
-            
-            {isLandingPage && onGetStarted && (
-              <Button variant="hero" size="default" onClick={onGetStarted}>
-                {t('nav.getStarted')}
-              </Button>
-            )}
-            
-            {/* Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="w-10 h-10 bg-retro-dark border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
-              >
-                <User className="w-5 h-5 text-retro-cream" />
-              </button>
-              
-              {/* Dropdown Menu */}
-              {isProfileOpen && (
-                <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-12 w-48 bg-retro-cream border-[3px] border-retro-dark rounded-lg shadow-retro-lg z-50`}>
-                  <div className="py-2">
-                    {user ? (
-                      // Logged-in: show profile + sign out
-                      <>
-                        <button
-                          onClick={() => {
-                            navigate('/profile');
-                            setIsProfileOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
-                        >
-                          <Package className="w-4 h-4" />
-                          <span className="font-medium">{t('nav.myProfile')}</span>
-                        </button>
-                        <button
-                          onClick={handleSignOut}
-                          className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-red hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span className="font-medium">{t('nav.signOut')}</span>
-                        </button>
-                      </>
-                    ) : (
-                      // Logged-out: show sign up + sign in
-                      <>
-                        <button
-                          onClick={() => {
-                            navigate('/signup');
-                            setIsProfileOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
-                        >
-                          <LogIn className="w-4 h-4" />
-                          <span className="font-medium">{t('nav.signUp')}</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            navigate('/signin');
-                            setIsProfileOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
-                        >
-                          <UserCircle className="w-4 h-4" />
-                          <span className="font-medium">{t('nav.signIn')}</span>
-                        </button>
-                      </>
-                    )}
+            {/* Profile Dropdown - Only on non-landing pages */}
+            {!isLandingPage && (
+              <div className="relative">
+                <button
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="hidden md:flex w-10 h-10 bg-retro-dark border-[3px] border-retro-dark rounded-lg items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+                >
+                  <User className="w-5 h-5 text-retro-cream" />
+                </button>
+                
+                {/* Dropdown Menu */}
+                {isProfileOpen && (
+                  <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-12 w-48 bg-retro-cream border-[3px] border-retro-dark rounded-lg shadow-retro-lg z-50`}>
+                    <div className="py-2">
+                      {user ? (
+                        // Logged-in: show profile + sign out
+                        <>
+                          <button
+                            onClick={() => {
+                              navigate('/profile');
+                              setIsProfileOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                          >
+                            <Package className="w-4 h-4" />
+                            <span className="font-medium">{t('nav.myProfile')}</span>
+                          </button>
+                          <button
+                            onClick={handleSignOut}
+                            className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-red hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span className="font-medium">{t('nav.signOut')}</span>
+                          </button>
+                        </>
+                      ) : (
+                        // Logged-out: show sign up + sign in
+                        <>
+                          <button
+                            onClick={() => {
+                              navigate('/signup');
+                              setIsProfileOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                          >
+                            <LogIn className="w-4 h-4" />
+                            <span className="font-medium">{t('nav.signUp')}</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              navigate('/signin');
+                              setIsProfileOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                          >
+                            <UserCircle className="w-4 h-4" />
+                            <span className="font-medium">{t('nav.signIn')}</span>
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -277,7 +293,8 @@ export const Navigation = ({
                 </Button>
               )}
               
-              {isLandingPage && navItems.map((item) => (
+              {/* Navigation Items */}
+              {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => handleNavClick(item.href)}
@@ -291,9 +308,72 @@ export const Navigation = ({
                 </button>
               ))}
               
+              {/* Profile Section for Mobile */}
+              <div className="pt-2 border-t-[2px] border-retro-dark/20">
+                {user ? (
+                  // Logged-in: show profile + sign out
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate('/profile');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <Package className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.myProfile')}</span>
+                    </button>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-red hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signOut')}</span>
+                    </button>
+                  </>
+                ) : (
+                  // Logged-out: show sign up + sign in
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate('/signup');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signUp')}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/signin');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <UserCircle className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signIn')}</span>
+                    </button>
+                  </>
+                )}
+              </div>
+              
+              {/* Get Started for Mobile */}
               {isLandingPage && onGetStarted && (
                 <Button variant="hero" size="default" onClick={onGetStarted} className="w-full mt-2">
-                  Get A Quote
+                  {t('nav.getStarted')}
+                </Button>
+              )}
+              
+              {/* Get Started for Non-Landing Pages Mobile */}
+              {!isLandingPage && (
+                <Button 
+                  variant="hero" 
+                  size="default" 
+                  onClick={() => navigate('/')} 
+                  className="w-full mt-2 bg-retro-red hover:bg-retro-red/90 border-retro-red shadow-retro-lg hover:shadow-retro-xl transform hover:scale-105 transition-all duration-200"
+                >
+                  {t('nav.getStarted')}
                 </Button>
               )}
             </div>
