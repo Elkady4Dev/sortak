@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { User, Package, Clock, CheckCircle, LogOut } from "lucide-react";
+import { User, Package, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -23,12 +23,6 @@ export const ProfilePage = () => {
     user?.email?.split("@")[0] ||
     "User";
 
-  // Dummy orders — replace with real Supabase query later
-  const orders = [
-    { id: "ORD-001", date: "2024-01-15", type: "35mm x 45mm Photos", status: "completed", price: "$24.99", delivery: "Digital Download" },
-    { id: "ORD-002", date: "2024-01-10", type: "50mm x 50mm Photos", status: "processing", price: "$19.99", delivery: "Print + Digital" },
-    { id: "ORD-003", date: "2024-01-05", type: "38mm x 48mm Photos", status: "completed", price: "$29.99", delivery: "Express Shipping" },
-  ];
 
   return (
     <div className="min-h-screen grain-overlay bg-retro-cream/50">
@@ -60,66 +54,6 @@ export const ProfilePage = () => {
       <section className="py-12 pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="grid gap-6">
-              {orders.map((order) => (
-                <div key={order.id} className="sticker bg-retro-cream rounded-xl p-6 shadow-retro-lg border-[2px] border-retro-dark/20">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-retro-sm ${
-                        order.type === "35mm x 45mm Photos" ? "bg-retro-teal border-[3px] border-retro-teal"
-                        : order.type === "50mm x 50mm Photos" ? "bg-retro-red border-[3px] border-retro-red"
-                        : "bg-retro-mustard border-[3px] border-retro-mustard"
-                      }`}>
-                        <Package className="w-6 h-6 text-retro-cream" />
-                      </div>
-                      <div>
-                        <h3 className="font-display text-lg text-retro-dark">{order.type}</h3>
-                        <p className="text-retro-dark-mid text-sm">{t('profile.orderNumber')} {order.id}</p>
-                      </div>
-                    </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
-                      order.status === "completed" ? "bg-retro-teal text-retro-cream" : "bg-retro-orange text-retro-cream"
-                    }`}>
-                      {order.status}
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-retro-dark-mid">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">{t('profile.orderDate')}</span>
-                      </div>
-                      <p className="text-retro-dark font-medium">{order.date}</p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-retro-dark-mid">
-                        <Package className="w-4 h-4" />
-                        <span className="text-sm">{t('profile.delivery')}</span>
-                      </div>
-                      <p className="text-retro-dark font-medium">{order.delivery}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t-[2px] border-retro-dark/20">
-                    <span className="text-retro-dark-mid text-sm">{t('profile.total')}</span>
-                    <span className="font-display text-xl text-retro-dark">{order.price}</span>
-                  </div>
-                  <div className="flex gap-3 pt-4">
-                    {order.status === "completed" ? (
-                      <Button variant="outline" size="sm" className="border-[2px] border-retro-teal hover:bg-retro-teal hover:text-retro-cream">
-                        <CheckCircle className="w-4 h-4 mr-2" />{t('profile.download')}
-                      </Button>
-                    ) : (
-                      <Button variant="hero" size="sm" disabled>
-                        <Clock className="w-4 h-4 mr-2" />{t('profile.processing')}
-                      </Button>
-                    )}
-                    <Button variant="outline" size="sm" className="border-[2px] border-retro-dark hover:bg-retro-dark hover:text-retro-cream">
-                      {t('profile.viewDetails')}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
 
             <div className="mt-12 text-center">
               <div className="sticker bg-retro-dark rounded-xl p-8 shadow-retro-lg text-retro-cream">

@@ -29,9 +29,9 @@ export const SuccessPage = ({ wantsPrint, onStartOver, onBack, selectedVariation
       console.log('Original imageDataUrl length:', imageDataUrl.length);
       console.log('ImageDataUrl starts with:', imageDataUrl.substring(0, 50));
 
-      // Handle demo mode URLs (external URLs)
+      // Handle external URLs
       if (imageDataUrl.startsWith('http')) {
-        // For demo mode with external URLs, fetch and convert to blob
+        // For external URLs, fetch and convert to blob
         fetch(imageDataUrl)
           .then(response => response.blob())
           .then(blob => {

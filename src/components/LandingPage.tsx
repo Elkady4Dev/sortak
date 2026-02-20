@@ -8,11 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 interface LandingPageProps {
   onGetStarted: () => void;
-  isDemoMode?: boolean;
-  toggleDemoMode?: () => void;
 }
 
-export const LandingPage = ({ onGetStarted, isDemoMode = false, toggleDemoMode }: LandingPageProps) => {
+export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
   const { user, loading } = useAuth();
   const { t, isRTL } = useLanguage();
   const navigate = useNavigate();
