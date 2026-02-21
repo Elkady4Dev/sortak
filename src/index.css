@@ -80,25 +80,66 @@
   }
 
   .dark {
-    --background: 20 18% 10%;
-    --foreground: 25 60% 92%;
-    --card: 20 15% 14%;
-    --card-foreground: 25 60% 92%;
-    --popover: 20 15% 14%;
-    --popover-foreground: 25 60% 92%;
+    /* ===== RETRO TOKEN OVERRIDES ===== */
+
+    /* Dark navy replaces cream/paper/peach (containers, backgrounds) */
+    --retro-cream:    220 45% 14%;
+    --retro-paper:    220 40% 16%;
+    --retro-peach:    220 35% 18%;
+    --retro-peach-dark: 220 35% 12%;
+
+    /* White/cream replaces dark (text, borders, shadows) */
+    --retro-dark:       210 30% 92%;
+    --retro-dark-mid:   210 20% 65%;
+    --retro-dark-light: 210 15% 45%;
+
+    /* Red stays exactly the same — untouched */
+    /* --retro-red, --retro-red-light: unchanged */
+
+    /* Slightly brighten accent colours for dark bg legibility */
+    --retro-teal:    168 55% 48%;
+    --retro-mustard: 42  85% 55%;
+    --retro-orange:  25  90% 55%;
+
+    /* ===== SEMANTIC TOKEN OVERRIDES ===== */
+
+    /* Page background → dark navy */
+    --background: 220 45% 11%;
+    --foreground: 210 30% 92%;
+
+    /* Cards → slightly lighter navy */
+    --card: 220 40% 16%;
+    --card-foreground: 210 30% 92%;
+
+    --popover: 220 40% 16%;
+    --popover-foreground: 210 30% 92%;
+
+    /* Primary (red) — keep same hue, slightly brighter for dark bg */
     --primary: 0 70% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 25 80% 50%;
+
+    --secondary: 25 85% 55%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 20 12% 18%;
-    --muted-foreground: 20 8% 55%;
-    --accent: 168 45% 42%;
+
+    --muted: 220 30% 20%;
+    --muted-foreground: 210 15% 55%;
+
+    --accent: 168 50% 48%;
     --accent-foreground: 0 0% 100%;
+
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 20 12% 22%;
-    --input: 20 12% 22%;
-    --ring: 0 70% 55%;
+
+    --border: 220 25% 24%;
+    --input:  220 25% 24%;
+    --ring:   0 70% 55%;
+
+    /* Shadows use light colour on dark bg */
+    --shadow-retro:       4px 4px 0px hsl(210 30% 92% / 0.15);
+    --shadow-retro-sm:    3px 3px 0px hsl(210 30% 92% / 0.15);
+    --shadow-retro-lg:    6px 6px 0px hsl(210 30% 92% / 0.15);
+    --shadow-retro-red:   4px 4px 0px hsl(0 72% 45%);
+    --shadow-retro-hover: 2px 2px 0px hsl(210 30% 92% / 0.15);
   }
 }
 
@@ -162,6 +203,41 @@
     box-shadow: var(--shadow-retro);
   }
 
+  /* ===== READABLE MUTED TEXT =====
+     Use instead of text-retro-dark-mid on pages where the background
+     flips in dark mode. Works because it uses explicit color values
+     rather than Tailwind opacity modifiers (which break with hsl vars). */
+  .text-muted-readable {
+    color: hsl(20 12% 35%);   /* dark brownish-grey on light bg */
+  }
+
+  .dark .text-muted-readable {
+    color: hsl(210 25% 75%);  /* light blue-grey on dark navy bg */
+  }
+
+  /* ===== INVERSE CONTAINER =====
+     Light mode: dark background with cream text (the "dark card" look)
+     Dark mode:  flips to a lighter navy so it stands out from the page bg
+     Use this instead of bg-retro-dark whenever you want a container
+     that inverts correctly in dark mode.                               */
+  .bg-retro-inverse {
+    background-color: hsl(var(--retro-dark));
+    color: hsl(var(--retro-cream));
+  }
+
+  .dark .bg-retro-inverse {
+    background-color: hsl(220 38% 22%);   /* lighter navy — distinct from page bg */
+    color: hsl(var(--retro-dark));         /* near-white in dark mode */
+  }
+
+  /* Child text helpers that respect the inversion */
+  .bg-retro-inverse .text-retro-cream { color: hsl(var(--retro-cream)); }
+  .dark .bg-retro-inverse .text-retro-cream { color: hsl(var(--retro-dark)); }
+  .bg-retro-inverse .text-retro-cream\/70 { color: hsl(var(--retro-cream) / 0.7); }
+  .dark .bg-retro-inverse .text-retro-cream\/70 { color: hsl(var(--retro-dark) / 0.7); }
+  .bg-retro-inverse .border-retro-cream { border-color: hsl(var(--retro-cream)); }
+  .dark .bg-retro-inverse .border-retro-cream { border-color: hsl(var(--retro-dark)); }
+
   /* ===== GRAIN TEXTURE OVERLAY ===== */
   .grain-overlay::after {
     content: "";
@@ -184,6 +260,10 @@
     background-size: 12px 12px;
   }
 
+  .dark .halftone-bg {
+    background-image: radial-gradient(circle, hsl(210 30% 92% / 0.07) 1px, transparent 1px);
+  }
+
   /* ===== RETRO STRIPE PATTERN ===== */
   .stripe-bg {
     background-image: repeating-linear-gradient(
@@ -192,6 +272,16 @@
       transparent 8px,
       hsl(20 30% 8% / 0.03) 8px,
       hsl(20 30% 8% / 0.03) 16px
+    );
+  }
+
+  .dark .stripe-bg {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      hsl(210 30% 92% / 0.04) 8px,
+      hsl(210 30% 92% / 0.04) 16px
     );
   }
 
