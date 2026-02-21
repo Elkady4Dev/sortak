@@ -6,44 +6,59 @@ import { useTokenNavigation } from "@/hooks/useTokenNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
+// Generates a heavily compressed thumbnail (~2–5 KB) from a full data URL
+const generateThumbnail = (dataUrl: string): Promise<string> =>
+  new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_WIDTH = 120;
+      const scale = MAX_WIDTH / img.width;
+      const canvas = document.createElement('canvas');
+      canvas.width = MAX_WIDTH;
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // quality 0.4 = aggressive compression, still recognisable as a thumbnail
+      resolve(canvas.toDataURL('image/jpeg', 0.4).split(',')[1]);
+    };
+    img.src = dataUrl;
+  });
+
 export const DeliveryConfirmationPage = () => {
   const { state, updateState } = usePhotoFlowState();
   const { navigateWithToken } = useTokenNavigation();
   const { user } = useAuth();
 
   const [confirming, setConfirming] = useState(false);
-  const hasSubmitted = useRef(false); // prevents duplicate inserts even if called twice
+  const hasSubmitted = useRef(false);
 
-  const handleConfirm = () => {
-    // Guard against double-clicks
+  const handleConfirm = async () => {
     if (confirming || hasSubmitted.current) return;
     hasSubmitted.current = true;
     setConfirming(true);
 
-    // Navigate immediately — don't await the DB insert
-    updateState({ step: 5 });
-    navigateWithToken('/success');
-
-    // Fire-and-forget: save order in the background
+    // Fire-and-forget: generate thumbnail and save order in the background
     if (user && state.selectedVariationData) {
       const { imageDataUrl, filename, photoType } = state.selectedVariationData;
-      const base64 = imageDataUrl.includes(',')
-        ? imageDataUrl.split(',')[1]
-        : imageDataUrl;
 
-      supabase.from('orders').insert({
-        user_id: user.id,
-        photo_type: photoType ?? state.documentType ?? 'unknown',
-        variation_id: state.selectedVariation ?? 0,
-        image_data: base64,
-        filename,
-        wants_print: state.wantsPrint,
-        delivery_address: state.deliveryAddress.trim() || null,
-        status: 'completed',
-      }).then(({ error }) => {
-        if (error) console.error('[DeliveryConfirmationPage] Failed to save order:', error);
+      generateThumbnail(imageDataUrl).then((thumbnailBase64) => {
+        supabase.from('orders').insert({
+          user_id: user.id,
+          photo_type: photoType ?? state.documentType ?? 'unknown',
+          variation_id: state.selectedVariation ?? 0,
+          image_data: thumbnailBase64,
+          filename,
+          wants_print: state.wantsPrint,
+          delivery_address: state.deliveryAddress.trim() || null,
+          status: 'completed',
+        }).then(({ error }) => {
+          if (error) console.error('[DeliveryConfirmationPage] Failed to save order:', error);
+        });
       });
     }
+
+    // Navigate immediately — thumbnail generation and DB insert happen in background
+    updateState({ step: 5 });
+    navigateWithToken('/success');
   };
 
   const handleBack = () => {
