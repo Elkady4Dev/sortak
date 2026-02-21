@@ -345,23 +345,23 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
               {/* Face Guide Overlay */}
               {!isCameraLoading && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                  <div className={`relative`}>
-                    {/* Retro Oval Frame */}
-                    <div className={`w-64 h-80 border-[6px] ${frameColor} rounded-full transition-all duration-300 shadow-retro-lg`}>
-                      {/* Corner decorations */}
-                      <div className="absolute -top-4 -left-4 w-8 h-8 bg-retro-red border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
-                      <div className="absolute -top-4 -right-4 w-8 h-8 bg-retro-mustard border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
-                      <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-retro-teal border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
-                      <div className="absolute -bottom-4 -right-4 w-8 h-8 bg-retro-red border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
+                  <div className={`relative w-full max-w-xs sm:max-w-sm flex items-center justify-center`}>
+                    {/* Retro Oval Frame - Responsive */}
+                    <div className={`w-48 h-60 sm:w-56 sm:h-72 md:w-64 md:h-80 border-[4px] sm:border-[6px] ${frameColor} rounded-full transition-all duration-300 shadow-retro-lg`}>
+                      {/* Corner decorations - Responsive */}
+                      <div className="absolute -top-2 sm:-top-3 -left-2 sm:-left-4 w-4 h-4 sm:w-6 sm:h-6 bg-retro-red border-[2px] sm:border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
+                      <div className="absolute -top-2 sm:-top-3 -right-2 sm:-right-4 w-4 h-4 sm:w-6 sm:h-6 bg-retro-mustard border-[2px] sm:border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
+                      <div className="absolute -bottom-2 sm:-bottom-3 -left-2 sm:-left-4 w-4 h-4 sm:w-6 sm:h-6 bg-retro-teal border-[2px] sm:border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
+                      <div className="absolute -bottom-2 sm:-bottom-3 -right-2 sm:-right-4 w-4 h-4 sm:w-6 sm:h-6 bg-retro-red border-[2px] sm:border-[3px] border-retro-dark rounded-lg shadow-retro-sm" />
                     </div>
                     
-                    {/* Status Badge */}
-                    <div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full border-[3px] transition-all duration-300 ${
+                    {/* Status Badge - Responsive */}
+                    <div className={`absolute -bottom-8 sm:-bottom-10 left-1/2 -translate-x-1/2 px-2 sm:px-3 py-1 sm:py-2 rounded-full border-[2px] sm:border-[3px] transition-all duration-300 ${
                       allValid 
                         ? "bg-retro-teal border-retro-teal text-retro-cream shadow-retro-sm" 
                         : "bg-retro-cream border-retro-dark text-retro-dark shadow-retro-sm"
                     }`}>
-                      <span className="font-display text-sm font-bold tracking-wider">
+                      <span className="font-display text-xs sm:text-sm font-bold tracking-wider">
                         {frameHint}
                       </span>
                     </div>
@@ -369,31 +369,31 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                 </div>
               )}
 
-              {/* Top Controls */}
-              <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-30">
+              {/* Top Controls - Responsive */}
+              <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 lg:p-6 flex justify-between items-center z-30">
                 {/* Back Button */}
                 <button
                   onClick={onBack}
-                  className="w-12 h-12 bg-retro-cream/90 backdrop-blur-sm border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+                  className="w-8 h-8 sm:w-10 sm:h-10 bg-retro-cream/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
                 >
-                  <X className="w-6 h-6 text-retro-dark" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-retro-dark" />
                 </button>
 
-                {/* Validation Status */}
-                <div className="flex gap-2">
+                {/* Validation Status - Responsive */}
+                <div className="flex gap-1 sm:gap-2">
                   {validationItems.map((item, index) => (
                     <div
                       key={item.key}
-                      className={`w-10 h-10 rounded-full border-[3px] flex items-center justify-center transition-all duration-300 ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 rounded-full border-[2px] sm:border-[3px] flex items-center justify-center transition-all duration-300 ${
                         item.valid
                           ? "bg-retro-teal border-retro-teal shadow-retro-sm"
                           : "bg-retro-cream/50 border-retro-dark/50"
                       }`}
                     >
                       {item.valid ? (
-                        <Check className="w-5 h-5 text-retro-cream" />
+                        <Check className="w-3 h-3 sm:w-4 sm:h-4 text-retro-cream" />
                       ) : (
-                        <item.icon className="w-5 h-5 text-retro-dark" />
+                        <item.icon className="w-3 h-3 sm:w-4 sm:h-4 text-retro-dark" />
                       )}
                     </div>
                   ))}
@@ -402,24 +402,24 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                 {/* Upload Button */}
                 <button
                   onClick={triggerFileUpload}
-                  className="w-12 h-12 bg-retro-mustard/90 backdrop-blur-sm border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+                  className="w-8 h-8 sm:w-10 sm:h-10 bg-retro-mustard/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
                 >
-                  <Upload className="w-6 h-6 text-retro-dark" />
+                  <Upload className="w-4 h-4 sm:w-5 sm:h-5 text-retro-dark" />
                 </button>
               </div>
 
-              {/* Bottom Controls */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-30">
-                <div className="flex items-center justify-center gap-8">
+              {/* Bottom Controls - Responsive */}
+              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 lg:p-6 z-30">
+                <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8">
                   {/* Gallery Button */}
                   <button
                     onClick={openGallery}
-                    className="w-14 h-14 bg-retro-cream/90 backdrop-blur-sm border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150 relative"
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-retro-cream/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150 relative"
                   >
-                    <Image className="w-6 h-6 text-retro-dark" />
+                    <Image className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-retro-dark" />
                     {galleryImages.length > 0 && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-retro-red border-[2px] border-retro-cream rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-retro-cream">{galleryImages.length}</span>
+                      <div className="absolute -top-1 sm:-top-1 -right-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-retro-red border-[2px] sm:border-[2px] border-retro-cream rounded-full flex items-center justify-center">
+                        <span className="text-[8px] sm:text-xs font-bold text-retro-cream">{galleryImages.length}</span>
                       </div>
                     )}
                   </button>
@@ -429,7 +429,7 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                     <button
                       onClick={capturePhoto}
                       disabled={isCapturing || !allValid}
-                      className={`relative w-24 h-24 rounded-full border-[6px] transition-all duration-300 flex items-center justify-center ${
+                      className={`relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full border-[4px] sm:border-[6px] transition-all duration-300 flex items-center justify-center ${
                         allValid && !isCapturing
                           ? "bg-retro-red border-retro-red shadow-retro-lg hover:shadow-retro-hover hover:translate-x-[2px] hover:translate-y-[2px] animate-pulse"
                           : "bg-retro-dark/50 border-retro-dark/50"
@@ -437,23 +437,25 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                     >
                       {isCapturing ? (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-8 h-8 bg-retro-cream rounded-full animate-ping" />
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-retro-cream rounded-full animate-ping" />
                         </div>
                       ) : (
-                        <Camera className={`w-10 h-10 ${allValid ? "text-retro-cream" : "text-retro-dark/50"}`} />
+                        <Camera className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 ${allValid ? "text-retro-cream" : "text-retro-dark/50"}`} />
                       )}
                     </button>
                   </div>
 
-                  {/* Empty space for balance */}
-                  <div className="w-14 h-14" />
+                  {/* Flash Button - Responsive */}
+                  <button className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-retro-cream/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150">
+                    <Zap className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-retro-dark" />
+                  </button>
                 </div>
 
-                {/* Fun Tips */}
-                <div className="mt-6 text-center">
-                  <div className="inline-flex items-center gap-2 bg-retro-cream/90 backdrop-blur-sm border-[3px] border-retro-dark rounded-lg px-4 py-2 shadow-retro-sm">
-                    <Sparkles className="w-4 h-4 text-retro-dark" />
-                    <span className="font-display text-sm text-retro-dark tracking-wider">
+                {/* Fun Tips - Responsive */}
+                <div className="mt-3 sm:mt-4 lg:mt-6 text-center">
+                  <div className="inline-flex items-center gap-1 sm:gap-2 bg-retro-cream/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg px-2 sm:px-3 lg:px-4 py-1 sm:py-2 shadow-retro-sm">
+                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-retro-dark" />
+                    <span className="font-display text-[10px] sm:text-xs lg:text-sm text-retro-dark tracking-wider">
                       {allValid ? "Looking great! 📸" : "Move closer to the guide"}
                     </span>
                   </div>
@@ -469,49 +471,49 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
                 className="w-full h-full object-cover"
               />
 
-              {/* Top Controls for Preview */}
-              <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-30">
+              {/* Top Controls for Preview - Responsive */}
+              <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 lg:p-6 flex justify-between items-center z-30">
                 <button
                   onClick={retakePhoto}
-                  className="w-12 h-12 bg-retro-cream/90 backdrop-blur-sm border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+                  className="w-8 h-8 sm:w-10 sm:h-10 bg-retro-cream/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
                 >
-                  <RotateCcw className="w-6 h-6 text-retro-dark" />
+                  <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 text-retro-dark" />
                 </button>
 
-                <div className="sticker bg-retro-teal border-[3px] border-retro-teal rounded-lg px-4 py-2 shadow-retro-sm">
-                  <span className="font-display text-sm text-retro-cream font-bold tracking-wider">
+                <div className="sticker bg-retro-teal border-[2px] sm:border-[3px] border-retro-teal rounded-lg px-2 sm:px-3 lg:px-4 py-1 sm:py-2 shadow-retro-sm">
+                  <span className="font-display text-[10px] sm:text-xs lg:text-sm text-retro-cream font-bold tracking-wider">
                     Photo Captured!
                   </span>
                 </div>
 
                 <button
                   onClick={confirmPhoto}
-                  className="w-12 h-12 bg-retro-red/90 backdrop-blur-sm border-[3px] border-retro-red rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+                  className="w-8 h-8 sm:w-10 sm:h-10 bg-retro-red/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-retro-red rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
                 >
-                  <Check className="w-6 h-6 text-retro-cream" />
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 text-retro-cream" />
                 </button>
               </div>
 
-              {/* Bottom Controls for Preview */}
-              <div className="absolute bottom-0 left-4 right-4 p-4 z-30">
-                <div className="flex gap-3 max-w-xs mx-auto">
+              {/* Bottom Controls for Preview - Responsive */}
+              <div className="absolute bottom-0 left-4 right-4 p-2 sm:p-4 z-30">
+                <div className="w-full max-w-xs sm:max-w-sm mx-auto flex gap-2 sm:gap-3">
                   <Button
                     variant="outline"
-                    size="lg"
-                    className="flex-1 border-[3px] border-retro-dark bg-retro-cream/90 backdrop-blur-sm hover:bg-retro-dark hover:text-retro-cream"
+                    size="sm"
+                    className="flex-1 border-[2px] sm:border-[3px] border-retro-dark bg-retro-cream/90 backdrop-blur-sm hover:bg-retro-dark hover:text-retro-cream"
                     onClick={retakePhoto}
                   >
-                    <RotateCcw className="w-4 h-4 mr-1" />
-                    Retake
+                    <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-[10px] sm:text-xs">Retake</span>
                   </Button>
                   <Button
                     variant="hero"
-                    size="lg"
+                    size="sm"
                     className="flex-1"
                     onClick={confirmPhoto}
                   >
-                    <Check className="w-4 h-4 mr-1" />
-                    Use This
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-[10px] sm:text-xs">Use This</span>
                   </Button>
                 </div>
               </div>
