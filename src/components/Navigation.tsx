@@ -150,7 +150,7 @@ export const Navigation = ({
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 flex-1 justify-center">
             {navItems.map((item) => (
               <button
                 key={item.name}
@@ -166,36 +166,21 @@ export const Navigation = ({
             ))}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3">
-            {/* Language Toggle */}
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
-              className="w-10 h-10 bg-retro-mustard border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
-              title={t('language')}
-            >
-              <Globe className="w-5 h-5 text-retro-dark" />
-            </button>
-            
-            {showBackButton && onBack && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onBack}
-                className="hidden md:flex items-center gap-2 border-[2px] border-retro-dark hover:bg-retro-dark hover:text-retro-cream"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back
-              </Button>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden w-10 h-10 bg-retro-dark border-[3px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm hover:shadow-retro-hover hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-150"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-5 h-5 text-retro-cream" />
+            ) : (
+              <Menu className="w-5 h-5 text-retro-cream" />
             )}
-            
-            {isLandingPage && onGetStarted && (
-              <Button variant="hero" size="default" onClick={onGetStarted}>
-                {t('nav.getStarted')}
-              </Button>
-            )}
-            
-            {/* Profile Dropdown */}
+          </button>
+
+          {/* Action Buttons - Desktop Only */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Profile Dropdown - Desktop Only */}
             <div className="relative">
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -258,6 +243,12 @@ export const Navigation = ({
                 </div>
               )}
             </div>
+            
+            {isLandingPage && onGetStarted && (
+              <Button variant="hero" size="default" onClick={onGetStarted}>
+                {t('nav.getStarted')}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -265,6 +256,15 @@ export const Navigation = ({
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pt-4 border-t-[3px] border-retro-dark">
             <div className="flex flex-col gap-2">
+              {/* Language Toggle - Mobile */}
+              <button
+                onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
+                className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-mustard hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="font-medium">{language === 'en' ? 'العربية' : 'English'}</span>
+              </button>
+
               {showBackButton && onBack && (
                 <Button
                   variant="outline"
@@ -290,6 +290,59 @@ export const Navigation = ({
                   {item.name}
                 </button>
               ))}
+              
+              {/* Profile Options - Mobile */}
+              <div className="border-t-[2px] border-retro-dark/20 pt-2 mt-2">
+                {user ? (
+                  // Logged-in: show profile + sign out
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate('/profile');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <Package className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.myProfile')}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-red hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signOut')}</span>
+                    </button>
+                  </>
+                ) : (
+                  // Logged-out: show sign up + sign in
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate('/signup');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signUp')}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/signin');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 text-retro-dark hover:bg-retro-dark hover:text-retro-cream transition-colors duration-150 flex items-center gap-3"
+                    >
+                      <UserCircle className="w-4 h-4" />
+                      <span className="font-medium">{t('nav.signIn')}</span>
+                    </button>
+                  </>
+                )}
+              </div>
               
               {isLandingPage && onGetStarted && (
                 <Button variant="hero" size="default" onClick={onGetStarted} className="w-full mt-2">

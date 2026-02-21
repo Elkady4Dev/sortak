@@ -92,12 +92,12 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                     {/* Top row: Before and After photos */}
                     <div className="flex items-center justify-between w-full max-w-sm">
                       {/* Before Photo - Left */}
-                      <div className="relative w-40">
-                        <div className="sticker bg-retro-cream rounded-2xl overflow-hidden shadow-retro-md border-[3px] border-retro-dark">
+                      <div className="relative w-40 h-40">
+                        <div className="sticker bg-retro-cream rounded-2xl overflow-hidden shadow-retro-md border-[3px] border-retro-dark h-full">
                           <img
                             src="/images/yourphotoSection.jpeg"
                             alt="Before - Your photo"
-                            className="w-full h-40 object-contain"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="absolute -top-2 left-2 bg-retro-dark text-retro-cream px-2 py-1 rounded-full border-[2px] border-retro-dark text-xs font-display z-10 shadow-retro-sm">
@@ -118,12 +118,12 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                       </div>
 
                       {/* After Photo - Right */}
-                      <div className="relative w-40">
-                        <div className="sticker bg-retro-cream rounded-2xl overflow-hidden shadow-retro-md border-[3px] border-retro-dark">
+                      <div className="relative w-40 h-40">
+                        <div className="sticker bg-retro-cream rounded-2xl overflow-hidden shadow-retro-md border-[3px] border-retro-dark h-full">
                           <img
                             src="/images/4x6Section.jpeg"
                             alt="After - 4x6 print"
-                            className="w-full h-40 object-contain"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="absolute -top-2 right-2 bg-retro-red text-retro-cream px-2 py-1 rounded-full border-[2px] border-retro-dark text-xs font-display z-10 shadow-retro-sm">
