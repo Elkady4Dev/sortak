@@ -344,8 +344,8 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
 
               {/* Face Guide Overlay */}
               {!isCameraLoading && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 p-4">
-                  <div className={`relative w-full max-w-xs sm:max-w-sm`}>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                  <div className={`relative w-full max-w-xs sm:max-w-sm flex items-center justify-center`}>
                     {/* Retro Oval Frame - Responsive */}
                     <div className={`w-48 h-60 sm:w-56 sm:h-72 md:w-64 md:h-80 border-[4px] sm:border-[6px] ${frameColor} rounded-full transition-all duration-300 shadow-retro-lg`}>
                       {/* Corner decorations - Responsive */}
