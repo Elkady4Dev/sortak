@@ -242,8 +242,12 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const img = new Image();
+    console.log('File selected:', file.name, file.type, file.size);
+
+    // Create image using document.createElement to avoid TypeScript issues
+    const img = document.createElement('img');
     img.onload = () => {
+      console.log('Image loaded:', img.width, 'x', img.height);
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -263,12 +267,21 @@ export const PhotoCapture = ({ onPhotoCapture, onBack }: PhotoCaptureProps) => {
       const compressed = canvas.toDataURL('image/jpeg', 0.9);
       setCapturedImage(compressed);
       stopCamera();
+      console.log('Image processed and set as captured image');
+    };
+    img.onerror = (error) => {
+      console.error('Error loading image:', error);
     };
     img.src = URL.createObjectURL(file);
   };
 
   const triggerFileUpload = () => {
-    fileInputRef.current?.click();
+    console.log('Triggering file upload...');
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    } else {
+      console.error('File input ref is null');
+    }
   };
 
   const openGallery = () => {
