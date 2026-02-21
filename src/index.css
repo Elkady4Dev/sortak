@@ -203,6 +203,18 @@
     box-shadow: var(--shadow-retro);
   }
 
+  /* ===== READABLE MUTED TEXT =====
+     Use instead of text-retro-dark-mid on pages where the background
+     flips in dark mode. Works because it uses explicit color values
+     rather than Tailwind opacity modifiers (which break with hsl vars). */
+  .text-muted-readable {
+    color: hsl(20 12% 35%);   /* dark brownish-grey on light bg */
+  }
+
+  .dark .text-muted-readable {
+    color: hsl(210 25% 75%);  /* light blue-grey on dark navy bg */
+  }
+
   /* ===== INVERSE CONTAINER =====
      Light mode: dark background with cream text (the "dark card" look)
      Dark mode:  flips to a lighter navy so it stands out from the page bg
