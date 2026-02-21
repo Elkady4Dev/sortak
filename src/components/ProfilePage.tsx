@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { User, Package, Clock, CheckCircle, LogOut, ImageOff } from "lucide-react";
+import { User, Package, Clock, CheckCircle, LogOut, ImageOff, ChevronDown, ChevronUp, MapPin, Hash, Calendar, Printer, Download } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,6 +33,7 @@ export const ProfilePage = () => {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -125,97 +126,188 @@ export const ProfilePage = () => {
               <div className="grid gap-6">
                 {orders.map((order, idx) => {
                   const colorClass = TYPE_COLORS[idx % 3];
-                  const dateStr = order.created_at.slice(0, 10);
+                  const createdAt = new Date(order.created_at);
+                  const dateStr = createdAt.toLocaleDateString();
+                  const timeStr = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                   const delivery = order.wants_print ? "Print + Digital" : "Digital Download";
                   const price = order.wants_print ? "$9.99" : "Free";
                   const thumbSrc = order.image_data
                     ? `data:image/jpeg;base64,${order.image_data}`
                     : null;
+                  const isExpanded = expandedOrderId === order.id;
 
                   return (
                     <div
                       key={order.id}
-                      className="sticker bg-retro-cream rounded-xl p-6 shadow-retro-lg border-[2px] border-retro-dark/20"
+                      className="sticker bg-retro-cream rounded-xl shadow-retro-lg border-[2px] border-retro-dark/20 overflow-hidden"
                     >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          {/* Thumbnail */}
-                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-retro-sm overflow-hidden flex-shrink-0 ${colorClass}`}>
-                            {thumbSrc ? (
-                              <img
-                                src={thumbSrc}
-                                alt={order.filename}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <ImageOff className="w-6 h-6 text-retro-cream" />
-                            )}
+                      {/* Card header — always visible */}
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-retro-sm overflow-hidden flex-shrink-0 ${colorClass}`}>
+                              {thumbSrc ? (
+                                <img src={thumbSrc} alt={order.filename} className="w-full h-full object-cover" />
+                              ) : (
+                                <ImageOff className="w-6 h-6 text-retro-cream" />
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="font-display text-lg text-retro-dark">{order.photo_type}</h3>
+                              <p className="text-retro-dark-mid text-sm">{t('profile.orderNumber')} {order.id.slice(0, 8).toUpperCase()}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-display text-lg text-retro-dark">{order.photo_type}</h3>
-                            <p className="text-retro-dark-mid text-sm">{t('profile.orderNumber')} {order.id.slice(0, 8).toUpperCase()}</p>
+                          <div
+                            className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                              order.status === "completed"
+                                ? "bg-retro-teal text-retro-cream"
+                                : order.status === "processing"
+                                ? "bg-retro-orange text-retro-cream"
+                                : "bg-retro-red text-retro-cream"
+                            }`}
+                          >
+                            {order.status}
                           </div>
                         </div>
-                        <div
-                          className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
-                            order.status === "completed"
-                              ? "bg-retro-teal text-retro-cream"
-                              : order.status === "processing"
-                              ? "bg-retro-orange text-retro-cream"
-                              : "bg-retro-red text-retro-cream"
-                          }`}
-                        >
-                          {order.status}
-                        </div>
-                      </div>
 
-                      <div className="grid md:grid-cols-2 gap-4 mb-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-retro-dark-mid">
-                            <Clock className="w-4 h-4" />
-                            <span className="text-sm">{t('profile.orderDate')}</span>
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 text-retro-dark-mid">
+                              <Clock className="w-4 h-4" />
+                              <span className="text-sm">{t('profile.orderDate')}</span>
+                            </div>
+                            <p className="text-retro-dark font-medium">{dateStr}</p>
                           </div>
-                          <p className="text-retro-dark font-medium">{dateStr}</p>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-retro-dark-mid">
-                            <Package className="w-4 h-4" />
-                            <span className="text-sm">{t('profile.delivery')}</span>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 text-retro-dark-mid">
+                              <Package className="w-4 h-4" />
+                              <span className="text-sm">{t('profile.delivery')}</span>
+                            </div>
+                            <p className="text-retro-dark font-medium">{delivery}</p>
                           </div>
-                          <p className="text-retro-dark font-medium">{delivery}</p>
                         </div>
-                      </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t-[2px] border-retro-dark/20">
-                        <span className="text-retro-dark-mid text-sm">{t('profile.total')}</span>
-                        <span className="font-display text-xl text-retro-dark">{price}</span>
-                      </div>
+                        <div className="flex items-center justify-between pt-4 border-t-[2px] border-retro-dark/20">
+                          <span className="text-retro-dark-mid text-sm">{t('profile.total')}</span>
+                          <span className="font-display text-xl text-retro-dark">{price}</span>
+                        </div>
 
-                      <div className="flex gap-3 pt-4">
-                        {order.status === "completed" ? (
+                        <div className="flex gap-3 pt-4">
+                          {order.status === "completed" ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-[2px] border-retro-teal hover:bg-retro-teal hover:text-retro-cream"
+                              onClick={() => handleDownload(order)}
+                            >
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              {t('profile.download')}
+                            </Button>
+                          ) : (
+                            <Button variant="hero" size="sm" disabled>
+                              <Clock className="w-4 h-4 mr-2" />
+                              {t('profile.processing')}
+                            </Button>
+                          )}
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border-[2px] border-retro-teal hover:bg-retro-teal hover:text-retro-cream"
-                            onClick={() => handleDownload(order)}
+                            className="border-[2px] border-retro-dark hover:bg-retro-dark hover:text-retro-cream"
+                            onClick={() => setExpandedOrderId(isExpanded ? null : order.id)}
                           >
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            {t('profile.download')}
+                            {isExpanded ? (
+                              <><ChevronUp className="w-4 h-4 mr-2" />Hide Details</>
+                            ) : (
+                              <><ChevronDown className="w-4 h-4 mr-2" />{t('profile.viewDetails')}</>
+                            )}
                           </Button>
-                        ) : (
-                          <Button variant="hero" size="sm" disabled>
-                            <Clock className="w-4 h-4 mr-2" />
-                            {t('profile.processing')}
-                          </Button>
-                        )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="border-[2px] border-retro-dark hover:bg-retro-dark hover:text-retro-cream"
-                        >
-                          {t('profile.viewDetails')}
-                        </Button>
+                        </div>
                       </div>
+
+                      {/* Expanded details panel */}
+                      {isExpanded && (
+                        <div className="border-t-[2px] border-retro-dark/20 bg-retro-dark/5 p-6 animate-fade-in">
+                          <h4 className="font-display text-base text-retro-dark mb-4 uppercase tracking-wider">Order Details</h4>
+
+                          <div className="grid md:grid-cols-2 gap-6">
+                            {/* Left column — metadata */}
+                            <div className="space-y-4">
+                              <div className="flex items-start gap-3">
+                                <Hash className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Order ID</p>
+                                  <p className="text-retro-dark font-mono text-sm break-all">{order.id}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-3">
+                                <Calendar className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Date & Time</p>
+                                  <p className="text-retro-dark font-medium">{dateStr} at {timeStr}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-3">
+                                <Package className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Photo Type</p>
+                                  <p className="text-retro-dark font-medium">{order.photo_type}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-3">
+                                {order.wants_print ? (
+                                  <Printer className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                ) : (
+                                  <Download className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                )}
+                                <div>
+                                  <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Delivery Method</p>
+                                  <p className="text-retro-dark font-medium">{delivery}</p>
+                                </div>
+                              </div>
+
+                              {order.wants_print && order.delivery_address && (
+                                <div className="flex items-start gap-3">
+                                  <MapPin className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Delivery Address</p>
+                                    <p className="text-retro-dark font-medium">{order.delivery_address}</p>
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="flex items-start gap-3">
+                                <CheckCircle className="w-4 h-4 text-retro-dark-mid mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-0.5">Total Paid</p>
+                                  <p className="text-retro-dark font-display text-lg">{price}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Right column — full image */}
+                            <div>
+                              <p className="text-xs text-retro-dark-mid uppercase tracking-wider mb-3">Your Photo</p>
+                              {thumbSrc ? (
+                                <div className="relative rounded-xl overflow-hidden border-[2px] border-retro-dark/20 max-w-[200px]">
+                                  <img
+                                    src={thumbSrc}
+                                    alt={order.filename}
+                                    className="w-full h-auto object-cover"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="w-full aspect-[3/4] max-w-[200px] rounded-xl bg-retro-dark/10 flex items-center justify-center">
+                                  <ImageOff className="w-8 h-8 text-retro-dark-mid" />
+                                </div>
+                              )}
+                              <p className="text-xs text-retro-dark-mid mt-2">{order.filename}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
