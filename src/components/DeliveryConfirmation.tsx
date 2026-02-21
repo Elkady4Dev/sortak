@@ -1,4 +1,4 @@
-import { Printer, Download, MapPin } from "lucide-react";
+import { Printer, Download, MapPin, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ interface DeliveryConfirmationProps {
   setDeliveryAddress: (address: string) => void;
   onConfirm: () => void;
   onBack: () => void;
+  confirming?: boolean;
 }
 
 export const DeliveryConfirmation = ({
@@ -27,8 +28,9 @@ export const DeliveryConfirmation = ({
   setDeliveryAddress,
   onConfirm,
   onBack,
+  confirming = false,
 }: DeliveryConfirmationProps) => {
-  const canConfirm = !wantsPrint || (wantsPrint && deliveryAddress.trim().length > 10);
+  const canConfirm = !confirming && (!wantsPrint || (wantsPrint && deliveryAddress.trim().length > 10));
 
   return (
     <div className="min-h-screen bg-background">
@@ -144,7 +146,16 @@ export const DeliveryConfirmation = ({
             onClick={onConfirm}
             disabled={!canConfirm}
           >
-            {wantsPrint ? "Confirm & Pay" : "Confirm & Download"}
+            {confirming ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Processing…
+              </>
+            ) : wantsPrint ? (
+              "Confirm & Pay"
+            ) : (
+              "Confirm & Download"
+            )}
           </Button>
         </div>
       </div>
