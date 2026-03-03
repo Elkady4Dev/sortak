@@ -1,5 +1,5 @@
 import React from "react";
-import { Camera, FileCheck, Printer, ArrowRight, Shield, Clock, Award, Play, Star, Aperture, Film, Zap } from "lucide-react";
+import { Camera, FileCheck, Printer, ArrowRight, Shield, Clock, Award, Play, Star, Aperture, Film, Zap, Instagram, Linkedin, MessageCircle, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -134,7 +134,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
 
                     {/* Bottom: Verified Badge */}
                     <div className="relative">
-                      <div className="sticker bg-gradient-to-br from-retro-teal/20 to-retro-cream rounded-2xl overflow-hidden shadow-retro-lg border-[3px] border-retro-dark px-6 py-3">
+                      <div className="sticker bg-gradient-to-br from-retro-teal/20 via-retro-mustard/20 to-retro-red/20 border-[3px] border-retro-dark rounded-2xl overflow-hidden shadow-retro-lg border-[3px] border-retro-dark px-6 py-3">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-retro-teal border-[2px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm">
                             <FileCheck className="w-5 h-5 text-retro-cream" />
@@ -185,8 +185,8 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                   </div>
 
                   {/* Vinyl record badge */}
-                  <div className="absolute bottom-8 sm:bottom-10 lg:bottom-12 right-4 sm:right-6 lg:right-8 w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-retro-dark border-[2px] sm:border-[3px] border-retro-dark rounded-full z-30 flex items-center justify-center shadow-retro-lg">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-24 lg:h-24 border-[2px] sm:border-[3px] border-retro-mustard rounded-full flex items-center justify-center">
+                  <div className="absolute bottom-8 sm:bottom-10 lg:bottom-12 right-4 sm:right-6 lg:right-8 w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-retro-dark border-[2px] border-retro-dark/20 rounded-full z-30 flex items-center justify-center shadow-retro-lg">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-24 lg:h-24 border-[2px] border-retro-mustard/20 rounded-full flex items-center justify-center">
                       <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 border-[2px] border-retro-mustard/50 rounded-full flex items-center justify-center">
                         <div className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 bg-retro-mustard rounded-full flex items-center justify-center">
                           <div className="w-1 h-1 sm:w-2 sm:h-2 bg-retro-dark rounded-full" />
@@ -429,8 +429,10 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
               ].map((f, i) => (
                 <div key={f.title} className={`sticker bg-retro-cream rounded-xl p-6 ${i % 2 === 0 ? 'rotate-1' : '-rotate-1'} hover:rotate-0 transition-all duration-300`}>
                   <div className="text-center group">
-                    <div className={`w-16 h-16 ${f.color} border-[3px] border-retro-dark rounded-lg flex items-center justify-center mx-auto mb-4 shadow-retro-sm group-hover:shadow-retro-hover group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all duration-150`}>
-                      <f.icon className="w-7 h-7 text-retro-cream" strokeWidth={2} />
+                    <div className={`w-16 h-16 ${f.color} border-[3px] border-retro-dark rounded-lg mx-auto mb-4 shadow-retro-sm flex items-center justify-center group-hover:shadow-retro-hover group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all duration-150`}>
+                      <div className="flex items-center justify-center w-full h-full">
+                        <f.icon className="w-7 h-7 text-retro-cream" strokeWidth={2} />
+                      </div>
                     </div>
                     <h4 className="font-display text-xl text-retro-dark mb-2 tracking-wide">{f.title}</h4>
                     <p className="text-sm text-retro-dark-mid font-medium leading-relaxed">{f.desc}</p>
@@ -463,7 +465,7 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
                 <p className="font-display-serif italic text-retro-mustard text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[3rem] mb-4 sm:mb-6 text-center sm:text-left">
                   {t('cta.subtitle')}
                 </p>
-                <p className="text-sm sm:text-base mb-6 sm:mb-8 max-w-md mx-auto sm:mx-0 font-medium text-center sm:text-left" style={{color: 'rgba(255,255,255,0.7)'}}>
+                <p className="text-sm text-retro-cream/70 mb-6 sm:mb-8 max-w-md mx-auto font-medium">
                   {t('cta.description')}
                 </p>
                 <div className="flex justify-center sm:justify-start">
@@ -537,26 +539,72 @@ export const LandingPage = ({ onGetStarted }: LandingPageProps) => {
               {/* Visual side */}
               <div className="relative">
                 <div className="sticker bg-retro-inverse rounded-xl p-8 rotate-2 shadow-retro-lg">
-                  <div className="aspect-[4/3] bg-retro-teal/10 border-[2px] border-retro-dark/20 rounded-lg flex items-center justify-center mb-6">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-retro-teal border-[3px] border-retro-dark rounded-lg mx-auto mb-4 flex items-center justify-center shadow-retro-sm">
-                        <Camera className="w-12 h-12 text-retro-cream" />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="font-display text-3xl text-retro-cream">50K+</div>
-                        <div className="text-sm text-retro-cream/70 font-medium"></div>
-                      </div>
+                  <div className="bg-retro-cream/10 border-[2px] border-retro-dark/20 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="font-display text-sm tracking-wider text-retro-cream">Socials</div>
+                      <div className="text-xs text-retro-cream/70 font-medium">Follow Sortak</div>
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-retro-cream/10 border-[2px] border-retro-dark/20 rounded-lg">
-                      <div className="font-display text-2xl text-retro-cream">99.8%</div>
-                      <div className="text-xs text-retro-cream/70">{t('about.acceptanceRate')}</div>
-                    </div>
-                    <div className="text-center p-4 bg-retro-cream/10 border-[2px] border-retro-dark/20 rounded-lg">
-                      <div className="font-display text-2xl text-retro-cream">150+</div>
-                      <div className="text-xs text-retro-cream/70">{t('about.countries')}</div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <a
+                        href="#"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 p-3 rounded-lg bg-retro-dark/40 border-[2px] border-retro-dark/30 hover:bg-retro-dark/60 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-retro-mustard border-[2px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm">
+                          <Instagram className="w-4 h-4 text-retro-dark" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-display text-retro-cream">Instagram</div>
+                          <div className="text-[11px] text-retro-cream/70 truncate">@sortak</div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="#"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 p-3 rounded-lg bg-retro-dark/40 border-[2px] border-retro-dark/30 hover:bg-retro-dark/60 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-retro-teal border-[2px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm">
+                          <Linkedin className="w-4 h-4 text-retro-cream" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-display text-retro-cream">LinkedIn</div>
+                          <div className="text-[11px] text-retro-cream/70 truncate">/company/sortak</div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="#"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 p-3 rounded-lg bg-retro-dark/40 border-[2px] border-retro-dark/30 hover:bg-retro-dark/60 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-retro-cream border-[2px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm">
+                          <MessageCircle className="w-4 h-4 text-retro-dark" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-display text-retro-cream">Reddit</div>
+                          <div className="text-[11px] text-retro-cream/70 truncate">r/sortak</div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="#"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 p-3 rounded-lg bg-retro-dark/40 border-[2px] border-retro-dark/30 hover:bg-retro-dark/60 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-retro-red border-[2px] border-retro-dark rounded-lg flex items-center justify-center shadow-retro-sm">
+                          <Twitter className="w-4 h-4 text-retro-cream" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-display text-retro-cream">X</div>
+                          <div className="text-[11px] text-retro-cream/70 truncate">@sortak</div>
+                        </div>
+                      </a>
                     </div>
                   </div>
                 </div>
